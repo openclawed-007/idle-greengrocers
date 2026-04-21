@@ -1,0 +1,81 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import LeafDivider from '@components/LeafDivider.astro';
+import Button from '@components/Button.astro';
+import { site } from '@lib/site';
+---
+
+<BaseLayout
+  title="Delivery & Collection"
+  description="Local delivery and click-and-collect options from Idle Greengrocers across Bradford and the surrounding West Yorkshire area."
+>
+  <section class="bg-cream">
+    <div class="container-wide section pb-10 pt-16 text-center md:pb-14 md:pt-20">
+      <p class="eyebrow">Delivery &amp; Collection</p>
+      <h1 class="mt-3 font-display text-4xl font-medium text-forest-ink md:text-6xl">
+        From our crates<br />to your kitchen
+      </h1>
+    </div>
+
+    <div class="container-wide section grid gap-12 pb-24 md:grid-cols-2">
+      <div>
+        <LeafDivider tone="dark" label="Local Delivery" />
+        <div class="mt-6 space-y-4 text-[0.95rem] leading-relaxed text-ink/80">
+          <p>
+            We deliver across Idle, Thackley, Greengates, Shipley, Baildon, Saltaire and
+            Pudsey. Orders in by <strong>10am</strong> go out the same afternoon
+            Monday–Friday.
+          </p>
+          <p>
+            Delivery is <strong>£3.50</strong>, or free on orders over <strong>£30</strong>.
+          </p>
+          <div>
+            <p class="eyebrow !text-forest-ink/70">Postcode areas</p>
+            <ul class="mt-2 flex flex-wrap gap-2">
+              {site.deliveryPostcodes.map((p) => (
+                <li class="rounded-sm border border-forest/20 px-3 py-1 font-sans text-[0.72rem] font-medium uppercase tracking-widest2 text-forest">
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <LeafDivider tone="dark" label="Click &amp; Collect" />
+        <div class="mt-6 space-y-4 text-[0.95rem] leading-relaxed text-ink/80">
+          <p>
+            Prefer to swing by? Drop us a line with your list and a time that suits — we'll
+            have it packed and waiting at the counter.
+          </p>
+          <p>
+            No fee, no minimum. Just ring <a class="underline underline-offset-4" href={`tel:${site.contact.phone.replace(/\s/g, '')}`}>{site.contact.phoneDisplay}</a>
+            or send us an email.
+          </p>
+          <div class="pt-2">
+            <Button href="/contact" variant="primary">Place an order</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="green-texture bg-forest-ink text-cream">
+    <div class="container-wide section py-16 md:py-20">
+      <LeafDivider tone="cream" label="A few good-to-knows" />
+      <div class="mt-10 grid gap-10 md:grid-cols-3">
+        {[
+          { t: 'Paper, not plastic', d: 'Everything goes out in recycled kraft and paper bags — please pop them back to us to reuse.' },
+          { t: 'Substitutions', d: 'If a grower runs out, we\'ll swap like-for-like and let you know before it arrives. You can always decline.' },
+          { t: 'Payment', d: 'We take card on the doorstep, or you can pay in advance over the phone. No app, no account needed.' },
+        ].map((v) => (
+          <div>
+            <h3 class="font-display text-2xl font-medium text-cream">{v.t}</h3>
+            <p class="mt-3 text-[0.92rem] leading-relaxed text-cream/80">{v.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

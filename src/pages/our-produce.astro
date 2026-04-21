@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import LeafDivider from '@components/LeafDivider.astro';
+import ProductCard from '@components/ProductCard.astro';
+
+const products = (await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
+
+const categories = [
+  { id: 'all', label: 'All' },
+  { id: 'fruit', label: 'Fruit' },
+  { id: 'vegetables', label: 'Vegetables' },
+  { id: 'dairy-eggs', label: 'Dairy & Eggs' },
+  { id: 'bakery', label: 'Bakery' },
+  { id: 'preserves', label: 'Preserves & Pantry' },
+] as const;
+---
+
+<BaseLayout
+  title="Our Produce"
+  description="Browse fresh fruit, vegetables, dairy, eggs, bakery and local preserves available at Idle Greengrocers."
+>
+  <section class="bg-cream">
+    <div class="container-wide section pb-10 pt-16 text-center md:pb-14 md:pt-20">
+      <p class="eyebrow">Our Produce</p>
+      <h1 class="mt-3 font-display text-4xl font-medium text-forest-ink md:text-6xl">
+        Fresh today
+      </h1>
+      <p class="mx-auto mt-5 max-w-2xl text-[0.95rem] leading-relaxed text-ink/80">
+        Our shelves change with the seasons. Here's what's arriving from Yorkshire's best
+        growers and makers this week.
+      </p>
+    </div>
+
+    <div class="container-wide section pb-4">
+      <LeafDivider tone="dark" />
+    </div>
+
+    <!-- Category filter -->
+    <div class="container-wide section flex flex-wrap items-center justify-center gap-2 pb-10">
+      {categories.map((c) => (
+        <button
+          type="button"
+          data-filter={c.id}
+          class="btn-outline border-forest/40 px-4 py-2 text-[0.68rem] data-[active=true]:bg-forest data-[active=true]:text-cream"
+          data-active={c.id === 'all' ? 'true' : 'false'}
+        >
+          {c.label}
+        </button>
+      ))}
+    </div>
+
+    <div class="container-wide section grid grid-cols-2 gap-5 pb-24 sm:grid-cols-3 lg:grid-cols-4">
+      {products.map((p) => (
+        <div data-category={p.data.category}>
+          <ProductCard
+            name={p.data.name}
+            origin={p.data.origin}
+            price={p.data.price}
+            unit={p.data.unit}
+            image={p.data.image}
+            imageAlt={p.data.imageAlt}
+            isLocal={p.data.isLocal}
+          />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <script>
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const items = document.querySelectorAll<HTMLDivElement>('[data-category]');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-filter');
+        buttons.forEach((b) => b.setAttribute('data-active', b === btn ? 'true' : 'false'));
+        items.forEach((it) => {
+          const match = target === 'all' || it.getAttribute('data-category') === target;
+          it.style.display = match ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</BaseLayout>

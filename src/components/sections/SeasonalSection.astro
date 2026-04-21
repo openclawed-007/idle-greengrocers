@@ -1,0 +1,93 @@
+---
+import { getCollection } from 'astro:content';
+import Button from '@components/Button.astro';
+
+const seasons = await getCollection('seasonal');
+const active = seasons.find((s) => s.data.active) ?? seasons[0]!;
+---
+
+<section class="bg-cream">
+  <div class="container-wide section grid items-center gap-8 py-8 md:grid-cols-12 md:py-10">
+    <div class="md:col-span-5">
+      <p class="eyebrow">What's in Season</p>
+      <h2 class="mt-3 font-display text-4xl font-medium leading-tight text-forest-ink md:text-5xl">
+        The best of British,<br />right now
+      </h2>
+      <p class="mt-6 max-w-prose2 text-[0.95rem] leading-relaxed text-ink/80">
+        We work closely with local growers to bring you seasonal produce at its peak.
+        Fresher, tastier and better for our environment.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-6">
+        <Button href="/our-produce" variant="primary">Explore seasonal picks</Button>
+        <span class="font-script text-xl text-ink-muted">It tastes better in season.</span>
+      </div>
+    </div>
+
+    <div class="relative md:col-span-7">
+      <img
+        src={active.data.image}
+        alt={active.data.imageAlt}
+        width="1200"
+        height="800"
+        loading="lazy"
+        decoding="async"
+        class="aspect-[16/9] w-full object-cover shadow-card"
+      />
+
+      <!-- Pinned paper note -->
+      <div class="pinned-note absolute -right-3 -top-8 w-60 rotate-[2.5deg] bg-cream-50 px-6 pb-7 pt-8 md:-right-8 md:-top-12 md:w-64">
+        <!-- Pushpin -->
+        <span class="pin absolute -top-3 left-1/2 h-5 w-5 -translate-x-1/2" aria-hidden="true">
+          <span class="absolute inset-0 rounded-full bg-terracotta shadow-md"></span>
+          <span class="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-terracotta-soft"></span>
+          <span class="absolute left-[30%] top-[22%] h-1 w-1 rounded-full bg-white/70"></span>
+        </span>
+
+        <!-- Eyebrow with hairlines -->
+        <div class="flex items-center gap-2 text-terracotta">
+          <span class="h-px flex-1 bg-terracotta/30"></span>
+          <p class="font-sans text-[0.6rem] font-semibold uppercase tracking-widest2">
+            {active.data.title}
+          </p>
+          <span class="h-px flex-1 bg-terracotta/30"></span>
+        </div>
+
+        <ul class="mt-4 space-y-2 text-center font-display text-[1.35rem] leading-[1.15] text-forest-ink">
+          {active.data.items.map((it) => <li>{it}</li>)}
+        </ul>
+
+        <!-- Hand-drawn flourish -->
+        <svg viewBox="0 0 80 16" class="mx-auto mt-4 h-4 w-20 text-terracotta/60" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 8 Q 14 1 24 8 T 44 8 T 64 8" />
+          <path d="M64 8 l 6 -3 M64 8 l 6 3" />
+        </svg>
+
+        <p class="mt-2 text-center font-script text-base text-ink-muted">fresh this week</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pinned-note {
+    background-color: #FBF5E6;
+    /* Layered paper feel: subtle grain + soft warm vignette + a proper pinned-shadow. */
+    background-image:
+      radial-gradient(ellipse at 50% 0%, rgba(180,71,44,0.08), transparent 60%),
+      radial-gradient(rgba(28,26,22,0.05) 1px, transparent 1px),
+      radial-gradient(rgba(28,26,22,0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 6px 6px, 11px 11px;
+    background-position: 0 0, 0 0, 3px 3px;
+    box-shadow:
+      0 1px 1px rgba(28, 26, 22, 0.06),
+      0 10px 18px -6px rgba(28, 26, 22, 0.22),
+      0 24px 36px -18px rgba(28, 26, 22, 0.25);
+    /* Subtle inner highlight along the top edge to suggest paper thickness. */
+    border-top: 1px solid rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(28, 26, 22, 0.04);
+  }
+
+  .pinned-note .pin {
+    filter: drop-shadow(0 2px 2px rgba(28, 26, 22, 0.25));
+  }
+</style>

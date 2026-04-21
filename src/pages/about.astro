@@ -1,0 +1,230 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import LeafDivider from '@components/LeafDivider.astro';
+import Button from '@components/Button.astro';
+import CircularBadge from '@components/CircularBadge.astro';
+import { site } from '@lib/site';
+---
+
+<BaseLayout
+  title="About Us"
+  description={`The story behind ${site.name} — a family-run greengrocer in Idle village championing Yorkshire growers since ${site.established}.`}
+>
+  <section class="bg-cream">
+    <div class="container-wide section py-16 md:py-24">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="eyebrow">Our Story</p>
+        <h1 class="mt-3 font-display text-4xl font-medium leading-tight text-forest-ink md:text-6xl">
+          A proper<br />greengrocer.
+        </h1>
+        <p class="mx-auto mt-5 max-w-2xl text-[0.98rem] leading-relaxed text-ink/72">
+          A family-run shop in the heart of Idle, built around seasonal produce, known growers
+          and good food that feels close to home.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-8 lg:grid-cols-[minmax(0,0.98fr)_minmax(0,1.02fr)] lg:items-center lg:gap-10">
+        <div class="about-panel about-copy-panel">
+          <div class="space-y-4 text-[0.97rem] leading-relaxed text-ink/80">
+            <p>
+              Idle Greengrocers opened its doors in {site.established} with a simple idea:
+              make it easy to buy brilliant fruit and vegetables grown within a sensible
+              drive of home.
+            </p>
+            <p>
+              We're a family-run shop in the heart of Idle village. Most mornings you'll find
+              us at the back unpacking crates from Yorkshire growers we've known for years —
+              and the rest of the day, chatting with neighbours about what to do with a glut
+              of courgettes.
+            </p>
+            <p>
+              We believe food tastes better when it's grown slowly, picked ripe, and sold
+              honestly. That means short supply chains, seasonal menus, and no plastic where
+              we can help it.
+            </p>
+          </div>
+
+          <div class="mt-8 grid gap-4 sm:grid-cols-3">
+            <div class="about-stat">
+              <p class="about-stat-value">Est. {site.established}</p>
+              <p class="about-stat-label">Independent village shop</p>
+            </div>
+            <div class="about-stat">
+              <p class="about-stat-value">7 days</p>
+              <p class="about-stat-label">Open through the week</p>
+            </div>
+            <div class="about-stat">
+              <p class="about-stat-value">Yorkshire</p>
+              <p class="about-stat-label">Growers and makers first</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-image-wrap">
+          <div class="about-image-frame">
+            <img
+              src="/images/about/shop-interior.jpg"
+              alt="Inside Idle Greengrocers — wooden shelves lined with colourful seasonal produce."
+              width="1200"
+              height="1500"
+              class="aspect-[4/5] w-full object-cover"
+              loading="eager"
+            />
+          </div>
+          <div class="about-badge">
+            <CircularBadge topText="Est. 2020" bottomText="Idle · Yorkshire" tone="forest" size={130} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="green-texture bg-forest-ink text-cream">
+    <div class="container-wide section py-16 md:py-20">
+      <LeafDivider tone="cream" label="What we believe" />
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        {[
+          { t: 'Seasonal first', d: 'If it isn\'t in season on these islands, we probably don\'t stock it. What\'s ready now always tastes better.' },
+          { t: 'Short chains', d: 'The shorter the journey from grower to grocer, the better the flavour — and the smaller the footprint.' },
+          { t: 'Known faces', d: 'We buy from people, not contracts. Nearly every supplier on our shelves is someone we\'ve shaken hands with.' },
+        ].map((v) => (
+          <div class="belief-card">
+            <h3 class="font-display text-2xl font-medium text-cream">{v.t}</h3>
+            <p class="mt-3 text-[0.92rem] leading-relaxed text-cream/80">{v.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cream">
+    <div class="container-wide section py-16 md:py-20">
+      <div class="about-cta-panel">
+        <div>
+          <p class="eyebrow">Come by the shop</p>
+          <h2 class="mt-3 font-display text-3xl font-medium text-forest-ink md:text-4xl">
+            Come and say hello.
+          </h2>
+          <p class="mt-4 max-w-xl text-[0.95rem] leading-relaxed text-ink/80">
+            The shop is open seven days a week. Put the kettle on at home and swing by on your
+            way back — we'll have something good in.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <Button href="/contact" variant="primary">Get in touch</Button>
+          <Button href="/our-produce" variant="outline">Browse produce</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-panel,
+  .about-image-wrap,
+  .belief-card,
+  .about-cta-panel {
+    min-width: 0;
+  }
+
+  .about-copy-panel {
+    border: 1px solid rgba(31, 58, 40, 0.1);
+    background:
+      radial-gradient(circle at top right, rgba(216, 160, 122, 0.12), transparent 34%),
+      linear-gradient(180deg, rgba(251, 247, 238, 0.98), rgba(240, 226, 206, 0.7));
+    box-shadow: 0 18px 36px -28px rgba(28, 26, 22, 0.26);
+    padding: 1.5rem;
+  }
+
+  .about-stat {
+    border: 1px solid rgba(31, 58, 40, 0.1);
+    background: rgba(251, 247, 238, 0.72);
+    padding: 0.95rem 1rem;
+  }
+
+  .about-stat-value {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.55rem;
+    font-weight: 600;
+    line-height: 1;
+    color: #0e2419;
+  }
+
+  .about-stat-label {
+    margin-top: 0.45rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: rgba(28, 26, 22, 0.66);
+  }
+
+  .about-image-wrap {
+    position: relative;
+    padding-bottom: 1.5rem;
+  }
+
+  .about-image-frame {
+    overflow: hidden;
+    border: 1px solid rgba(31, 58, 40, 0.1);
+    background: rgba(251, 247, 238, 0.8);
+    box-shadow: 0 18px 36px -26px rgba(28, 26, 22, 0.26);
+  }
+
+  .about-badge {
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0;
+  }
+
+  .belief-card {
+    border: 1px solid rgba(245, 239, 227, 0.12);
+    background: rgba(11, 18, 13, 0.2);
+    padding: 1.35rem 1.2rem;
+    backdrop-filter: blur(1px);
+  }
+
+  .about-cta-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    justify-content: space-between;
+    border: 1px solid rgba(31, 58, 40, 0.1);
+    background: linear-gradient(135deg, rgba(240, 226, 206, 0.9), rgba(251, 247, 238, 0.96));
+    padding: 1.5rem;
+    box-shadow: 0 18px 36px -30px rgba(28, 26, 22, 0.18);
+  }
+
+  @media (min-width: 768px) {
+    .about-copy-panel,
+    .about-cta-panel {
+      padding: 2rem;
+    }
+
+    .about-cta-panel {
+      flex-direction: row;
+      align-items: end;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .about-image-wrap {
+      padding-left: 1.25rem;
+    }
+
+    .about-badge {
+      left: -1.4rem;
+      bottom: -1.2rem;
+    }
+  }
+
+  @media (max-width: 479px) {
+    .about-copy-panel,
+    .about-cta-panel {
+      padding: 1.2rem;
+    }
+
+    .about-badge {
+      transform: scale(0.78);
+      transform-origin: left bottom;
+    }
+  }
+</style>

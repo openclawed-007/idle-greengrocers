@@ -1,0 +1,94 @@
+---
+/**
+ * Circular stamp-style badge with curved upper text and optional lower text.
+ * Pure SVG — crisp at any size, zero JS.
+ */
+type Props = {
+  topText: string;
+  bottomText?: string;
+  centerLabel?: string;
+  tone?: 'terracotta' | 'forest' | 'ink';
+  size?: number;
+  class?: string;
+};
+const {
+  topText,
+  bottomText,
+  centerLabel,
+  tone = 'terracotta',
+  size = 160,
+  class: className = '',
+} = Astro.props;
+
+const color =
+  tone === 'terracotta' ? '#B4472C' : tone === 'forest' ? '#253628' : '#1C1A16';
+const topId = `badge-top-${Math.random().toString(36).slice(2, 8)}`;
+const bottomId = `badge-bottom-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<svg
+  viewBox="0 0 200 200"
+  width={size}
+  height={size}
+  class={className}
+  role="img"
+  aria-label={`${topText}${bottomText ? ' — ' + bottomText : ''}`}
+>
+  <defs>
+    <path id={topId} d="M 100,100 m -78,0 a 78,78 0 0,1 156,0" fill="none" />
+    <!-- Bottom path drawn right-to-left so textPath renders upright along the lower arc. -->
+    <path id={bottomId} d="M 100,100 m 78,0 a 78,78 0 0,1 -156,0" fill="none" />
+  </defs>
+
+  <circle cx="100" cy="100" r="92" fill="none" stroke={color} stroke-width="1" stroke-dasharray="2 3" opacity="0.7" />
+  <circle cx="100" cy="100" r="80" fill="none" stroke={color} stroke-width="1" />
+
+  <text
+    fill={color}
+    font-family="Inter, system-ui, sans-serif"
+    font-size="10.5"
+    font-weight="600"
+    letter-spacing="3.2"
+  >
+    <textPath href={`#${topId}`} startOffset="50%" text-anchor="middle">
+      {topText.toUpperCase()}
+    </textPath>
+  </text>
+
+  {bottomText && (
+    <text
+      fill={color}
+      font-family="Inter, system-ui, sans-serif"
+      font-size="10.5"
+      font-weight="600"
+      letter-spacing="3.2"
+    >
+      <textPath href={`#${bottomId}`} startOffset="50%" text-anchor="middle">
+        {bottomText.toUpperCase()}
+      </textPath>
+    </text>
+  )}
+
+  <!-- Central mark: stylised apple + leaf -->
+  <g transform="translate(100,100)" fill={color}>
+    <circle cx="-4" cy="4" r="9" />
+    <circle cx="5" cy="4" r="9" />
+    <path d="M 0 -6 C 6 -10 14 -8 14 -2 C 10 -2 4 -4 0 -6 Z" />
+    <path d="M 0 -6 L 0 3" stroke={color} stroke-width="1.2" />
+  </g>
+
+  {centerLabel && (
+    <text
+      x="100"
+      y="150"
+      fill={color}
+      font-family="Inter, system-ui, sans-serif"
+      font-size="9"
+      font-weight="600"
+      letter-spacing="2.4"
+      text-anchor="middle"
+    >
+      {centerLabel.toUpperCase()}
+    </text>
+  )}
+</svg>

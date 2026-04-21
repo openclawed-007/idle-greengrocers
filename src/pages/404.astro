@@ -1,0 +1,22 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Button from '@components/Button.astro';
+---
+
+<BaseLayout title="Page not found" noIndex={true}>
+  <section class="bg-cream">
+    <div class="container-wide section flex flex-col items-center gap-6 py-24 text-center md:py-32">
+      <p class="eyebrow">404</p>
+      <h1 class="font-display text-5xl font-medium text-forest-ink md:text-7xl">
+        A bit off the vine.
+      </h1>
+      <p class="max-w-prose2 text-[0.95rem] leading-relaxed text-ink/80">
+        That page has gone out of season. Try the home page, or browse today's produce.
+      </p>
+      <div class="flex flex-wrap justify-center gap-3">
+        <Button href="/" variant="primary">Back to home</Button>
+        <Button href="/our-produce" variant="outline">Browse produce</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

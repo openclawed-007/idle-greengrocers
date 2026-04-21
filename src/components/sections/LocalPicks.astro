@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import Button from '@components/Button.astro';
+import LeafDivider from '@components/LeafDivider.astro';
+import ProductCard from '@components/ProductCard.astro';
+
+const featured = (await getCollection('products', ({ data }) => data.featured))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 5);
+---
+
+<section class="green-texture bg-forest-ink text-cream">
+  <div class="container-wide section py-8 md:py-10">
+    <LeafDivider tone="cream" label="Local Picks" />
+
+    <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+      {featured.map((p) => (
+        <ProductCard
+          name={p.data.name}
+          origin={p.data.origin}
+          price={p.data.price}
+          unit={p.data.unit}
+          image={p.data.image}
+          imageAlt={p.data.imageAlt}
+          isLocal={p.data.isLocal}
+          tone="dark"
+          imageAspect="square"
+        />
+      ))}
+    </div>
+
+    <div class="mt-6 flex justify-center">
+      <Button href="/our-produce" variant="outline-cream">View all produce</Button>
+    </div>
+  </div>
+</section>

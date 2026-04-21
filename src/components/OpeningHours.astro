@@ -1,0 +1,328 @@
+---
+type HourRow = {
+  day: string;
+  open: string;
+  close: string;
+};
+
+type Props = {
+  hours: readonly HourRow[];
+  class?: string;
+};
+
+const { hours, class: className = '' } = Astro.props;
+
+function formatDisplayTime(value: string) {
+  const [hourText, minuteText] = value.split(':');
+  const hour = Number(hourText);
+  const minute = Number(minuteText);
+  const date = new Date(Date.UTC(2000, 0, 1, hour, minute));
+
+  return new Intl.DateTimeFormat('en-GB', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'UTC',
+  }).format(date);
+}
+
+const rows = hours.map((entry, index) => ({
+  ...entry,
+  index,
+  shortDay: entry.day.slice(0, 3),
+  display: `${formatDisplayTime(entry.open)} - ${formatDisplayTime(entry.close)}`,
+}));
+---
+
+<section class={`opening-hours-card mt-10 ${className}`} data-hours={JSON.stringify(rows)}>
+  <div class="hours-head">
+    <div>
+      <p class="eyebrow">Opening hours</p>
+      <p class="hours-subtext">Live status updates in UK time.</p>
+    </div>
+    <div class="hours-status" data-hours-status>
+      <span class="hours-dot" data-hours-dot></span>
+      <div>
+        <p class="hours-state" data-hours-state>Checking hours</p>
+        <p class="hours-next" data-hours-next>Using the weekly opening times below.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="hours-list" role="list">
+    {rows.map((entry) => (
+      <div class="hours-row" role="listitem" data-hours-row data-day={entry.day}>
+        <span class="hours-day">
+          <span class="hours-day-full">{entry.day}</span>
+          <span class="hours-day-short">{entry.shortDay}</span>
+        </span>
+        <span class="hours-time">{entry.display}</span>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .opening-hours-card {
+    min-width: 0;
+    border: 1px solid rgba(28, 26, 22, 0.1);
+    background: linear-gradient(180deg, rgba(245, 239, 227, 0.95), rgba(237, 227, 208, 0.72));
+    box-shadow: 0 14px 30px -22px rgba(28, 26, 22, 0.35);
+    padding: 1.25rem;
+  }
+
+  .hours-head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .hours-subtext {
+    margin-top: 0.35rem;
+    font-size: 0.88rem;
+    color: rgba(28, 26, 22, 0.66);
+  }
+
+  .hours-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    min-width: 0;
+    border: 1px solid rgba(31, 58, 40, 0.12);
+    background: rgba(251, 247, 238, 0.72);
+    padding: 0.85rem 0.95rem;
+  }
+
+  .hours-dot {
+    margin-top: 0.32rem;
+    height: 0.72rem;
+    width: 0.72rem;
+    flex: none;
+    border-radius: 999px;
+    background: #9a3f2b;
+    box-shadow: 0 0 0 4px rgba(154, 63, 43, 0.12);
+  }
+
+  .hours-state {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #0e2419;
+  }
+
+  .hours-next {
+    margin-top: 0.25rem;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: rgba(28, 26, 22, 0.72);
+    overflow-wrap: anywhere;
+  }
+
+  .hours-list {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .hours-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(28, 26, 22, 0.08);
+    padding: 0.8rem 0;
+    color: rgba(28, 26, 22, 0.72);
+  }
+
+  .hours-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .hours-day {
+    min-width: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1c1a16;
+  }
+
+  .hours-day-short {
+    display: none;
+  }
+
+  .hours-time {
+    min-width: 0;
+    font-size: 0.92rem;
+    color: rgba(28, 26, 22, 0.72);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .hours-row.is-today {
+    color: #0e2419;
+  }
+
+  .hours-row.is-today .hours-day,
+  .hours-row.is-today .hours-time {
+    color: #0e2419;
+    font-weight: 600;
+  }
+
+  .hours-row.is-today .hours-day::after {
+    content: 'Today';
+    display: inline-flex;
+    margin-left: 0.65rem;
+    border-radius: 999px;
+    background: rgba(31, 58, 40, 0.1);
+    padding: 0.22rem 0.5rem;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+
+  .hours-status[data-open='true'] .hours-dot {
+    background: #2f6b45;
+    box-shadow: 0 0 0 4px rgba(47, 107, 69, 0.14);
+  }
+
+  @media (min-width: 640px) {
+    .opening-hours-card {
+      padding: 1.5rem;
+    }
+
+    .hours-head {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .hours-status {
+      padding: 0.8rem 0.85rem;
+    }
+
+    .hours-row {
+      gap: 0.6rem;
+    }
+
+    .hours-day-full {
+      display: none;
+    }
+
+    .hours-day-short {
+      display: inline;
+    }
+
+    .hours-time {
+      font-size: 0.84rem;
+    }
+
+    .hours-row.is-today .hours-day::after {
+      margin-left: 0.4rem;
+      padding: 0.18rem 0.38rem;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+    }
+  }
+</style>
+
+<script>
+  const cards = document.querySelectorAll<HTMLElement>('.opening-hours-card[data-hours]');
+  const weekdayMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  function getUkDateParts() {
+    const formatter = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/London',
+      weekday: 'long',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+
+    const parts = formatter.formatToParts(new Date());
+    const weekday = parts.find((part) => part.type === 'weekday')?.value ?? 'Monday';
+    const hour = Number(parts.find((part) => part.type === 'hour')?.value ?? '0');
+    const minute = Number(parts.find((part) => part.type === 'minute')?.value ?? '0');
+
+    return { weekday, minutes: hour * 60 + minute };
+  }
+
+  function toMinutes(value: string) {
+    const [hour, minute] = value.split(':').map(Number);
+    return hour * 60 + minute;
+  }
+
+  function toDisplayTime(value: string) {
+    const [hourText, minuteText] = value.split(':');
+    const hour = Number(hourText);
+    const minute = Number(minuteText);
+    const date = new Date(Date.UTC(2000, 0, 1, hour, minute));
+
+    return new Intl.DateTimeFormat('en-GB', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'UTC',
+    }).format(date);
+  }
+
+  function updateHoursCard(card: HTMLElement) {
+    const raw = card.dataset.hours;
+    if (!raw) return;
+
+    const hours = JSON.parse(raw) as Array<{ day: string; open: string; close: string }>;
+    const status = card.querySelector<HTMLElement>('[data-hours-status]');
+    const state = card.querySelector<HTMLElement>('[data-hours-state]');
+    const next = card.querySelector<HTMLElement>('[data-hours-next]');
+    const rows = card.querySelectorAll<HTMLElement>('[data-hours-row]');
+    const { weekday, minutes } = getUkDateParts();
+    const todayIndex = weekdayMap.indexOf(weekday);
+    const todayHours = hours.find((entry) => entry.day === weekday);
+
+    rows.forEach((row) => row.classList.toggle('is-today', row.dataset.day === weekday));
+
+    if (!status || !state || !next || !todayHours || todayIndex === -1) return;
+
+    const openMinutes = toMinutes(todayHours.open);
+    const closeMinutes = toMinutes(todayHours.close);
+    const isOpen = minutes >= openMinutes && minutes < closeMinutes;
+
+    status.dataset.open = isOpen ? 'true' : 'false';
+    state.textContent = isOpen ? 'Open now' : 'Closed now';
+
+    if (isOpen) {
+      next.textContent = `Closes today at ${toDisplayTime(todayHours.close)}.`;
+      return;
+    }
+
+    if (minutes < openMinutes) {
+      next.textContent = `Opens today at ${toDisplayTime(todayHours.open)}.`;
+      return;
+    }
+
+    for (let offset = 1; offset <= 7; offset += 1) {
+      const upcomingIndex = (todayIndex + offset) % 7;
+      const upcomingDay = weekdayMap[upcomingIndex];
+      const upcomingHours = hours.find((entry) => entry.day === upcomingDay);
+
+      if (!upcomingHours) continue;
+
+      const prefix = offset === 1 ? 'Opens tomorrow' : `Opens ${upcomingDay}`;
+      next.textContent = `${prefix} at ${toDisplayTime(upcomingHours.open)}.`;
+      return;
+    }
+
+    next.textContent = 'See the weekly opening times below.';
+  }
+
+  cards.forEach((card) => {
+    updateHoursCard(card);
+    window.setInterval(() => updateHoursCard(card), 60000);
+  });
+</script>

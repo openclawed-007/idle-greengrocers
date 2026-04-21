@@ -1,0 +1,18 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/sections/Hero.astro';
+import LocalPicks from '@components/sections/LocalPicks.astro';
+import SeasonalSection from '@components/sections/SeasonalSection.astro';
+import MakersAndShop from '@components/sections/MakersAndShop.astro';
+---
+
+<BaseLayout
+  title={undefined}
+  description="Fresh fruit, vegetables and local produce from Yorkshire growers and makers, served from our shop in the heart of Idle village."
+  includeLocalBusinessSchema={true}
+>
+  <Hero />
+  <LocalPicks />
+  <SeasonalSection />
+  <MakersAndShop />
+</BaseLayout>

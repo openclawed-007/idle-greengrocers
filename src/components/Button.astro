@@ -1,0 +1,33 @@
+---
+type Props = {
+  href?: string;
+  variant?: 'primary' | 'outline' | 'outline-cream';
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  ariaLabel?: string;
+};
+const {
+  href,
+  variant = 'primary',
+  type = 'button',
+  class: className = '',
+  ariaLabel,
+} = Astro.props;
+
+const classes = {
+  primary: 'btn-primary',
+  outline: 'btn-outline',
+  'outline-cream': 'btn-outline-cream',
+}[variant];
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  class={`${classes} ${className}`}
+  href={href}
+  type={href ? undefined : type}
+  aria-label={ariaLabel}
+>
+  <slot />
+</Tag>

@@ -1,0 +1,31 @@
+---
+/**
+ * Decorative leaf + rule divider used above section titles (e.g. "LOCAL PICKS").
+ */
+type Props = {
+  tone?: 'dark' | 'cream';
+  label?: string;
+  class?: string;
+};
+const { tone = 'cream', label, class: className = '' } = Astro.props;
+const stroke = tone === 'cream' ? 'text-cream/80' : 'text-forest-ink/70';
+const text = tone === 'cream' ? 'text-cream' : 'text-forest-ink';
+---
+
+<div class={`flex items-center justify-center gap-4 ${className}`}>
+  <svg viewBox="0 0 80 10" class={`h-3 w-20 ${stroke}`} aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+    <path d="M2 5 H60" />
+    <path d="M60 5 c2 -3 6 -3 8 0 c-2 3 -6 3 -8 0 z" />
+    <path d="M68 5 H78" />
+  </svg>
+  {label && (
+    <span class={`font-sans text-[0.72rem] font-medium uppercase tracking-widest2 ${text}`}>
+      {label}
+    </span>
+  )}
+  <svg viewBox="0 0 80 10" class={`h-3 w-20 ${stroke} -scale-x-100`} aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+    <path d="M2 5 H60" />
+    <path d="M60 5 c2 -3 6 -3 8 0 c-2 3 -6 3 -8 0 z" />
+    <path d="M68 5 H78" />
+  </svg>
+</div>

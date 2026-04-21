@@ -1,0 +1,61 @@
+---
+type Props = {
+  name: string;
+  origin: string;
+  price: number;
+  unit: string;
+  image: string;
+  imageAlt: string;
+  isLocal?: boolean;
+  tone?: 'cream' | 'dark';
+  loading?: 'eager' | 'lazy';
+  imageAspect?: 'portrait' | 'square';
+};
+const {
+  name,
+  origin,
+  price,
+  unit,
+  image,
+  imageAlt,
+  isLocal = true,
+  tone = 'cream',
+  loading = 'lazy',
+  imageAspect = 'portrait',
+} = Astro.props;
+
+const cardBg = tone === 'dark' ? 'bg-cream-50' : 'bg-white';
+const aspectClass = imageAspect === 'square' ? 'aspect-square' : 'aspect-[4/5]';
+const priceFormatted = new Intl.NumberFormat('en-GB', {
+  style: 'currency',
+  currency: 'GBP',
+}).format(price);
+---
+
+<article class={`group flex h-full flex-col overflow-hidden shadow-card ${cardBg}`}>
+  <div class={`relative ${aspectClass} overflow-hidden bg-cream-300`}>
+    <img
+      src={image}
+      alt={imageAlt}
+      loading={loading}
+      decoding="async"
+      class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+      width="640"
+      height="800"
+    />
+    {isLocal && (
+      <span class="absolute right-3 top-3 bg-cream-50/95 px-2 py-1 font-sans text-[0.58rem] font-semibold uppercase tracking-widest2 text-forest-ink">
+        Local
+      </span>
+    )}
+  </div>
+  <div class="flex flex-1 flex-col items-center gap-1 px-3 py-3 text-center">
+    <h3 class="font-sans text-[0.78rem] font-semibold uppercase tracking-widest2 text-forest-ink">
+      {name}
+    </h3>
+    <p class="font-sans text-[0.7rem] text-ink-muted">{origin}</p>
+    <p class="mt-2 font-sans text-[0.72rem] font-medium uppercase tracking-widest2 text-ink">
+      {priceFormatted} / {unit}
+    </p>
+  </div>
+</article>

@@ -1,0 +1,255 @@
+---
+import { navLeft, navRight } from '@lib/nav';
+import Wordmark from '@components/Wordmark.astro';
+import BagIcon from '@components/BagIcon.astro';
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+function isActive(href: string) {
+  if (href === '/') return currentPath === '/';
+  return currentPath === href || currentPath.startsWith(href + '/');
+}
+---
+
+<header class="site-header relative z-40 border-b border-ink/5 bg-cream">
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <div class="container-wide section flex items-center justify-between gap-6 py-6 md:py-7">
+    <!-- Left nav (desktop ≥ lg) -->
+    <nav aria-label="Primary" class="hidden flex-1 items-center gap-8 lg:flex">
+      {navLeft.map((item) => (
+        <a
+          href={item.href}
+          class={`nav-link ${isActive(item.href) ? 'is-active' : ''}`}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Mobile / tablet: hamburger / close (visible below lg) -->
+    <button
+      type="button"
+      class="mobile-toggle -ml-2 inline-flex items-center justify-center rounded p-2 text-ink lg:hidden"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      data-mobile-toggle
+    >
+      <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+        <!-- Three lines that morph into an X when [aria-expanded=true] -->
+        <path class="line line-top"    d="M4 7h16" />
+        <path class="line line-middle" d="M4 12h16" />
+        <path class="line line-bottom" d="M4 17h16" />
+      </svg>
+    </button>
+
+    <!-- Centered wordmark -->
+    <div class="flex flex-1 justify-center">
+      <Wordmark size="md" />
+    </div>
+
+    <!-- Right nav (desktop ≥ lg) -->
+    <nav aria-label="Secondary" class="hidden flex-1 items-center justify-end gap-8 lg:flex">
+      {navRight.map((item) => (
+        <a
+          href={item.href}
+          class={`nav-link ${isActive(item.href) ? 'is-active' : ''}`}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+      <a href="/our-produce" class="nav-link" aria-label="Our produce (shopping bag)">
+        <BagIcon class="h-5 w-5" />
+      </a>
+    </nav>
+
+    <!-- Mobile / tablet: bag shortcut -->
+    <a href="/our-produce" class="nav-link p-2 lg:hidden" aria-label="Our produce (shopping bag)">
+      <BagIcon class="h-5 w-5" />
+    </a>
+  </div>
+
+  <!-- Mobile: backdrop — overlays page content, closes the menu on click. -->
+  <div class="mobile-backdrop lg:hidden" data-mobile-backdrop aria-hidden="true"></div>
+
+  <!-- Mobile nav panel — absolutely positioned, doesn't push page content. -->
+  <div
+    id="mobile-nav"
+    class="mobile-panel lg:hidden"
+    data-mobile-panel
+    aria-hidden="true"
+  >
+    <nav aria-label="Mobile" class="container-wide section flex flex-col py-2">
+      {[...navLeft, ...navRight].map((item) => (
+        <a
+          href={item.href}
+          class={`mobile-link ${isActive(item.href) ? 'is-active' : ''}`}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+          data-mobile-link
+        >
+          <span>{item.label}</span>
+          <svg viewBox="0 0 24 24" class="h-4 w-4 text-ink/40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<style>
+  /*
+   * Hamburger ↔ X morph. We rotate the top/bottom lines into an X and
+   * fade the middle line out when the button is expanded.
+   */
+  .mobile-toggle .line {
+    transform-origin: center;
+    transition: transform 200ms ease, opacity 150ms ease;
+  }
+  .mobile-toggle[aria-expanded='true'] .line-top {
+    transform: translateY(5px) rotate(45deg);
+  }
+  .mobile-toggle[aria-expanded='true'] .line-middle {
+    opacity: 0;
+  }
+  .mobile-toggle[aria-expanded='true'] .line-bottom {
+    transform: translateY(-5px) rotate(-45deg);
+  }
+
+  /*
+   * Backdrop: full-page dim beneath the mobile nav. Starts hidden,
+   * fades in when the menu opens. Click to close.
+   */
+  .mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    background: rgba(14, 36, 25, 0.28);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+  }
+  .mobile-backdrop[data-open] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /*
+   * Mobile nav panel: absolutely positioned below the header so it
+   * overlays the page content rather than pushing it. Slides & fades
+   * in/out on open/close.
+   */
+  .mobile-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 40;
+    background: #F5EFE3;
+    border-top: 1px solid rgba(28, 26, 22, 0.08);
+    box-shadow: 0 16px 24px -12px rgba(14, 36, 25, 0.18);
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 200ms ease, transform 220ms ease;
+  }
+  .mobile-panel[data-open] {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /*
+   * Menu items: bigger tap targets, subtle divider between items, and
+   * an "active" marker flush left.
+   */
+  .mobile-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0.25rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: #0E2419;
+    border-top: 1px solid rgba(28, 26, 22, 0.06);
+    transition: color 150ms ease, transform 150ms ease;
+  }
+  .mobile-link:first-child {
+    border-top: none;
+  }
+  .mobile-link:hover,
+  .mobile-link:focus-visible {
+    color: #B4472C;
+    transform: translateX(2px);
+  }
+  .mobile-link.is-active {
+    color: #B4472C;
+  }
+  .mobile-link.is-active::before {
+    content: '';
+    position: absolute;
+    left: -0.75rem;
+    top: 50%;
+    height: 1.25rem;
+    width: 3px;
+    background: #B4472C;
+    transform: translateY(-50%);
+    border-radius: 2px;
+  }
+
+  /* Lock body scroll while the menu is open (avoids background jump). */
+  :global(body.mobile-nav-open) {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-mobile-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-mobile-panel]');
+  const backdrop = document.querySelector<HTMLElement>('[data-mobile-backdrop]');
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-mobile-link]');
+
+  function setOpen(open: boolean) {
+    if (!btn || !panel || !backdrop) return;
+    if (open) {
+      panel.setAttribute('data-open', '');
+      backdrop.setAttribute('data-open', '');
+      panel.setAttribute('aria-hidden', 'false');
+      btn.setAttribute('aria-expanded', 'true');
+      btn.setAttribute('aria-label', 'Close menu');
+      document.body.classList.add('mobile-nav-open');
+    } else {
+      panel.removeAttribute('data-open');
+      backdrop.removeAttribute('data-open');
+      panel.setAttribute('aria-hidden', 'true');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Open menu');
+      document.body.classList.remove('mobile-nav-open');
+    }
+  }
+
+  btn?.addEventListener('click', () => {
+    const isOpen = btn.getAttribute('aria-expanded') === 'true';
+    setOpen(!isOpen);
+  });
+
+  backdrop?.addEventListener('click', () => setOpen(false));
+
+  // Close the menu when a link is tapped (same-page anchors still work).
+  links.forEach((a) => a.addEventListener('click', () => setOpen(false)));
+
+  // Esc closes.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+
+  // If the viewport becomes desktop-sized, reset state so nothing lingers.
+  const mq = window.matchMedia('(min-width: 1024px)');
+  mq.addEventListener('change', (e) => { if (e.matches) setOpen(false); });
+</script>
