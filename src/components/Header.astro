@@ -15,7 +15,7 @@ function isActive(href: string) {
 <header class="site-header relative z-40 border-b border-ink/5 bg-cream">
   <a href="#main" class="skip-link">Skip to content</a>
 
-  <div class="container-wide section flex items-center justify-between gap-6 py-6 md:py-7">
+  <div class="container-wide section relative flex items-center justify-center gap-6 py-6 md:py-7 lg:justify-between">
     <!-- Left nav (desktop ≥ lg) -->
     <nav aria-label="Primary" class="hidden flex-1 items-center gap-8 lg:flex">
       {navLeft.map((item) => (
@@ -32,7 +32,7 @@ function isActive(href: string) {
     <!-- Mobile / tablet: hamburger / close (visible below lg) -->
     <button
       type="button"
-      class="mobile-toggle -ml-2 inline-flex items-center justify-center rounded p-2 text-ink lg:hidden"
+      class="mobile-toggle absolute left-0 top-1/2 inline-flex -translate-y-1/2 items-center justify-center rounded p-2 text-ink lg:hidden"
       aria-label="Open menu"
       aria-expanded="false"
       aria-controls="mobile-nav"
@@ -47,7 +47,7 @@ function isActive(href: string) {
     </button>
 
     <!-- Centered wordmark -->
-    <div class="flex flex-1 justify-center">
+    <div class="flex justify-center lg:flex-1">
       <Wordmark size="md" />
     </div>
 
@@ -68,7 +68,7 @@ function isActive(href: string) {
     </nav>
 
     <!-- Mobile / tablet: bag shortcut -->
-    <a href={withBase('/our-produce')} class="nav-link p-2 lg:hidden" aria-label="Our produce (shopping bag)">
+    <a href={withBase('/our-produce')} class="nav-link absolute right-0 top-1/2 p-2 -translate-y-1/2 lg:hidden" aria-label="Our produce (shopping bag)">
       <BagIcon class="h-5 w-5" />
     </a>
   </div>
