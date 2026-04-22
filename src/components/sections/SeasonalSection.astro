@@ -37,9 +37,9 @@ const activeImage = withBase(active.data.image);
       />
 
       <!-- Pinned paper note -->
-      <div class="pinned-note absolute -right-3 -top-8 w-60 rotate-[2.5deg] bg-cream-50 px-6 pb-7 pt-8 md:-right-8 md:-top-12 md:w-64">
+      <div class="pinned-note absolute right-2 top-2 w-44 rotate-[1.5deg] bg-cream-50 px-4 pb-4 pt-5 md:-right-8 md:-top-12 md:w-64 md:rotate-[2.5deg] md:px-6 md:pb-7 md:pt-8">
         <!-- Pushpin -->
-        <span class="pin absolute -top-3 left-1/2 h-5 w-5 -translate-x-1/2" aria-hidden="true">
+        <span class="pin absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 md:-top-3 md:h-5 md:w-5" aria-hidden="true">
           <span class="absolute inset-0 rounded-full bg-terracotta shadow-md"></span>
           <span class="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-terracotta-soft"></span>
           <span class="absolute left-[30%] top-[22%] h-1 w-1 rounded-full bg-white/70"></span>
@@ -48,23 +48,23 @@ const activeImage = withBase(active.data.image);
         <!-- Eyebrow with hairlines -->
         <div class="flex items-center gap-2 text-terracotta">
           <span class="h-px flex-1 bg-terracotta/30"></span>
-          <p class="font-sans text-[0.6rem] font-semibold uppercase tracking-widest2">
+          <p class="font-sans text-[0.5rem] font-semibold uppercase tracking-[0.22em] md:text-[0.6rem] md:tracking-widest2">
             {active.data.title}
           </p>
           <span class="h-px flex-1 bg-terracotta/30"></span>
         </div>
 
-        <ul class="mt-4 space-y-2 text-center font-display text-[1.35rem] leading-[1.15] text-forest-ink">
+        <ul class="mt-3 space-y-1 text-center font-display text-[1.02rem] leading-[1.1] text-forest-ink md:mt-4 md:space-y-2 md:text-[1.35rem] md:leading-[1.15]">
           {active.data.items.map((it) => <li>{it}</li>)}
         </ul>
 
         <!-- Hand-drawn flourish -->
-        <svg viewBox="0 0 80 16" class="mx-auto mt-4 h-4 w-20 text-terracotta/60" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true">
+        <svg viewBox="0 0 80 16" class="mx-auto mt-3 h-3 w-16 text-terracotta/60 md:mt-4 md:h-4 md:w-20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true">
           <path d="M4 8 Q 14 1 24 8 T 44 8 T 64 8" />
           <path d="M64 8 l 6 -3 M64 8 l 6 3" />
         </svg>
 
-        <p class="mt-2 text-center font-script text-base text-ink-muted">fresh this week</p>
+        <p class="mt-1 text-center font-script text-sm text-ink-muted md:mt-2 md:text-base">fresh this week</p>
       </div>
     </div>
   </div>
