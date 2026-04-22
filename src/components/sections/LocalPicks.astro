@@ -23,6 +23,8 @@ const featured = (await getCollection('products', ({ data }) => data.featured))
           image={p.data.image}
           imageAlt={p.data.imageAlt}
           isLocal={p.data.isLocal}
+          supplier={p.data.supplier}
+          seasons={p.data.season}
           tone="dark"
           imageAspect="square"
         />

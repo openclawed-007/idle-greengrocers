@@ -46,6 +46,25 @@ export const site = {
     facebook: 'https://www.facebook.com/profile.php?id=61557840344635',
   },
 
+  // Prefer WhatsApp over the main line for out-of-hours queries. Falls back
+  // to `contact.phone` if left empty.
+  whatsapp: {
+    number: '+447780438563',       // digits only, E.164 — used in wa.me links
+    display: '07780 438563',
+  },
+
+  delivery: {
+    cost: '£3.50',
+    freeOver: '£30',
+    cutoff: '10am',                // same-day cutoff for Mon–Fri
+    days: 'Mon – Fri',
+    areas: [
+      'Idle', 'Thackley', 'Greengates', 'Shipley', 'Baildon', 'Saltaire', 'Pudsey',
+    ],
+  },
+
+  // Postcode prefixes we deliver to. Used by the PostcodeChecker widget
+  // on the home and delivery pages.
   deliveryPostcodes: [
     'BD10',
     'BD2',
@@ -54,6 +73,17 @@ export const site = {
     'LS28',
     'LS19',
   ],
+
+  // Top-of-page announcement. Leave `enabled: false` to hide the strip.
+  // Bump `id` to force-show a new message to users who dismissed the
+  // previous one.
+  announcement: {
+    enabled: true,
+    id: '2026-04-spring',
+    message: 'Yorkshire rhubarb is in — pop by the shop while it lasts.',
+    linkLabel: 'See what\u2019s in',
+    linkHref: '/our-produce',
+  },
 } as const;
 
 export type Site = typeof site;

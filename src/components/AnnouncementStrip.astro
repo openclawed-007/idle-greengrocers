@@ -1,0 +1,140 @@
+---
+import { withBase } from '@lib/paths';
+import { site } from '@lib/site';
+
+/**
+ * A thin strip at the very top of the page for timely shop news —
+ * bank-holiday hours, what's just landed, etc. Dismissible per-user via
+ * localStorage. Bump `site.announcement.id` to force-show a new message
+ * to everyone, including users who dismissed the previous one.
+ *
+ * Hidden automatically when `site.announcement.enabled === false`.
+ */
+const a = site.announcement;
+---
+
+{a.enabled && (
+  <aside
+    class="announcement-strip"
+    data-announcement
+    data-announcement-id={a.id}
+    role="region"
+    aria-label="Shop announcement"
+  >
+    <div class="container-wide section flex items-center justify-center gap-3 py-2 text-center">
+      <p class="announcement-text">
+        <span>{a.message}</span>
+        {a.linkLabel && a.linkHref && (
+          <a href={withBase(a.linkHref)} class="announcement-link">
+            {a.linkLabel} <span aria-hidden="true">&rarr;</span>
+          </a>
+        )}
+      </p>
+      <button
+        type="button"
+        class="announcement-close"
+        aria-label="Dismiss announcement"
+        data-announcement-close
+      >
+        <svg viewBox="0 0 20 20" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <path d="M5 5 L15 15 M15 5 L5 15" />
+        </svg>
+      </button>
+    </div>
+  </aside>
+)}
+
+<style>
+  .announcement-strip {
+    position: relative;
+    z-index: 30;
+    background: linear-gradient(180deg, #17301F 0%, #0E2419 100%);
+    color: #F5EFE3;
+    border-bottom: 1px solid rgba(245, 239, 227, 0.08);
+  }
+
+  .announcement-text {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+    /* Graceful truncation on very narrow screens. */
+    min-width: 0;
+  }
+
+  .announcement-link {
+    margin-left: 0.6rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+    text-decoration-color: rgba(245, 239, 227, 0.4);
+    transition: text-decoration-color 150ms ease;
+    white-space: nowrap;
+  }
+
+  .announcement-link:hover,
+  .announcement-link:focus-visible {
+    text-decoration-color: rgba(245, 239, 227, 0.9);
+  }
+
+  .announcement-close {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.75rem;
+    width: 1.75rem;
+    color: rgba(245, 239, 227, 0.55);
+    transition: color 150ms ease, background-color 150ms ease;
+    border-radius: 2px;
+  }
+
+  .announcement-close:hover,
+  .announcement-close:focus-visible {
+    color: #F5EFE3;
+    background: rgba(245, 239, 227, 0.08);
+  }
+
+  /* Collapse the strip once dismissed, but preserve the DOM in case the
+     announcement ID changes and we need to re-show it on a later visit. */
+  .announcement-strip[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 520px) {
+    .announcement-text {
+      font-size: 0.78rem;
+    }
+    .announcement-link {
+      display: block;
+      margin-left: 0;
+      margin-top: 0.25rem;
+    }
+  }
+</style>
+
+<script>
+  const STORAGE_KEY = 'ig-announcement-dismissed';
+  const strip = document.querySelector<HTMLElement>('[data-announcement]');
+  if (strip) {
+    const id = strip.dataset.announcementId ?? '';
+    try {
+      const dismissed = window.localStorage.getItem(STORAGE_KEY);
+      if (dismissed && dismissed === id) {
+        strip.hidden = true;
+      }
+    } catch {
+      // localStorage disabled (private mode, etc.) — just show the strip.
+    }
+
+    const closeBtn = strip.querySelector<HTMLButtonElement>('[data-announcement-close]');
+    closeBtn?.addEventListener('click', () => {
+      strip.hidden = true;
+      try {
+        window.localStorage.setItem(STORAGE_KEY, id);
+      } catch {
+        /* noop */
+      }
+    });
+  }
+</script>

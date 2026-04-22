@@ -2,7 +2,15 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import LeafDivider from '@components/LeafDivider.astro';
 import Button from '@components/Button.astro';
+import PostcodeChecker from '@components/PostcodeChecker.astro';
 import { site } from '@lib/site';
+
+const areaSentence = (() => {
+  const areas = [...site.delivery.areas];
+  if (areas.length <= 1) return areas.join('');
+  const last = areas.pop();
+  return `${areas.join(', ')} and ${last}`;
+})();
 ---
 
 <BaseLayout
@@ -22,12 +30,13 @@ import { site } from '@lib/site';
         <LeafDivider tone="dark" label="Local Delivery" />
         <div class="mt-6 space-y-4 text-[0.95rem] leading-relaxed text-ink/80">
           <p>
-            We deliver across Idle, Thackley, Greengates, Shipley, Baildon, Saltaire and
-            Pudsey. Orders in by <strong>10am</strong> go out the same afternoon
-            Monday–Friday.
+            We deliver across {areaSentence}. Orders in by
+            <strong>{site.delivery.cutoff}</strong> go out the same afternoon,
+            {site.delivery.days}.
           </p>
           <p>
-            Delivery is <strong>£3.50</strong>, or free on orders over <strong>£30</strong>.
+            Delivery is <strong>{site.delivery.cost}</strong>, or free on orders over
+            <strong>{site.delivery.freeOver}</strong>.
           </p>
           <div>
             <p class="eyebrow !text-forest-ink/70">Postcode areas</p>
@@ -38,6 +47,10 @@ import { site } from '@lib/site';
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div class="pt-2">
+            <PostcodeChecker heading={null} subheading={null} class="shadow-none" />
           </div>
         </div>
       </div>

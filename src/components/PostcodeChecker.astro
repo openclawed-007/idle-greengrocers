@@ -1,0 +1,383 @@
+---
+import { withBase } from '@lib/paths';
+import { site } from '@lib/site';
+
+type Props = {
+  /** Visual tone — cream panel on dark backgrounds, forest text on cream. */
+  tone?: 'cream' | 'forest';
+  /** Optional eyebrow + heading above the input. Pass null to suppress. */
+  heading?: string | null;
+  subheading?: string | null;
+  class?: string;
+};
+
+const {
+  tone = 'forest',
+  heading = 'Do we deliver to you?',
+  subheading = `Enter your postcode — delivery is ${site.delivery.cost}, free over ${site.delivery.freeOver}.`,
+  class: className = '',
+} = Astro.props;
+
+const prefixes = site.deliveryPostcodes;
+const collectHref = withBase('/delivery');
+const contactHref = withBase('/contact');
+---
+
+<section
+  class={`postcode-checker postcode-checker--${tone} ${className}`}
+  data-postcode-root
+  data-postcode-prefixes={prefixes.join(',')}
+>
+  {heading && (
+    <div class="postcode-checker__intro">
+      <p class="eyebrow postcode-checker__eyebrow">Local delivery</p>
+      <h2 class="postcode-checker__heading">{heading}</h2>
+      {subheading && <p class="postcode-checker__sub">{subheading}</p>}
+    </div>
+  )}
+
+  <form class="postcode-checker__form" data-postcode-form novalidate>
+    <label class="sr-only" for="postcode-input">Your postcode</label>
+    <div class="postcode-checker__input-row">
+      <input
+        id="postcode-input"
+        name="postcode"
+        type="text"
+        inputmode="text"
+        autocomplete="postal-code"
+        autocapitalize="characters"
+        spellcheck="false"
+        placeholder="e.g. BD10 8PQ"
+        class="postcode-checker__input"
+        data-postcode-input
+        required
+      />
+      <button type="submit" class="postcode-checker__button">
+        Check
+      </button>
+    </div>
+
+    <p
+      class="postcode-checker__result"
+      data-postcode-result
+      hidden
+      aria-live="polite"
+    ></p>
+  </form>
+
+  <template data-postcode-template-yes>
+    <span class="postcode-checker__result-badge postcode-checker__result-badge--yes">
+      <svg viewBox="0 0 20 20" class="postcode-checker__tick" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 10 l4 4 l8 -9" />
+      </svg>
+      Yes — we deliver to <strong data-slot="code"></strong>.
+    </span>
+    <span class="postcode-checker__result-next">
+      <span data-slot="next"></span>
+      <a href={collectHref} class="postcode-checker__link">See delivery details &rarr;</a>
+    </span>
+  </template>
+
+  <template data-postcode-template-no>
+    <span class="postcode-checker__result-badge postcode-checker__result-badge--no">
+      <svg viewBox="0 0 20 20" class="postcode-checker__cross" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6 L14 14 M14 6 L6 14" />
+      </svg>
+      Not this time — <strong data-slot="code"></strong> is outside our delivery area.
+    </span>
+    <span class="postcode-checker__result-next">
+      You are very welcome to collect in-shop, or
+      <a href={contactHref} class="postcode-checker__link">drop us a note</a>
+      and we will see what we can do.
+    </span>
+  </template>
+
+  <template data-postcode-template-invalid>
+    <span class="postcode-checker__result-badge postcode-checker__result-badge--warn">
+      Check that postcode — it does not look quite right.
+    </span>
+  </template>
+</section>
+
+<style>
+  .postcode-checker {
+    min-width: 0;
+    border: 1px solid rgba(31, 58, 40, 0.12);
+    padding: 1.25rem;
+  }
+
+  .postcode-checker--forest {
+    background:
+      radial-gradient(circle at top right, rgba(216, 160, 122, 0.12), transparent 38%),
+      linear-gradient(180deg, rgba(251, 247, 238, 0.98), rgba(240, 226, 206, 0.7));
+    box-shadow: 0 18px 36px -28px rgba(28, 26, 22, 0.28);
+    color: #1c1a16;
+  }
+
+  .postcode-checker--cream {
+    background: rgba(14, 36, 25, 0.5);
+    border-color: rgba(245, 239, 227, 0.16);
+    color: #F5EFE3;
+  }
+
+  .postcode-checker__eyebrow {
+    /* Inherits .eyebrow from globals (terracotta); keep it consistent on both tones. */
+  }
+
+  .postcode-checker--cream .postcode-checker__eyebrow {
+    color: #D8A07A;
+  }
+
+  .postcode-checker__heading {
+    margin-top: 0.35rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.55rem;
+    font-weight: 500;
+    line-height: 1.15;
+    color: inherit;
+  }
+
+  .postcode-checker__sub {
+    margin-top: 0.55rem;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: currentColor;
+    opacity: 0.75;
+    max-width: 44ch;
+  }
+
+  .postcode-checker__form {
+    margin-top: 1rem;
+  }
+
+  .postcode-checker__input-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .postcode-checker__input {
+    flex: 1 1 12rem;
+    min-width: 0;
+    border: 1px solid rgba(31, 58, 40, 0.22);
+    background: rgba(255, 251, 245, 0.96);
+    padding: 0.75rem 0.9rem;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #1c1a16;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  .postcode-checker--cream .postcode-checker__input {
+    border-color: rgba(245, 239, 227, 0.24);
+    background: rgba(14, 36, 25, 0.35);
+    color: #F5EFE3;
+  }
+
+  .postcode-checker--cream .postcode-checker__input::placeholder {
+    color: rgba(245, 239, 227, 0.5);
+  }
+
+  .postcode-checker__input:focus {
+    border-color: rgba(37, 54, 40, 0.65);
+    box-shadow: 0 0 0 4px rgba(37, 54, 40, 0.1);
+    outline: none;
+  }
+
+  .postcode-checker--cream .postcode-checker__input:focus {
+    border-color: rgba(245, 239, 227, 0.7);
+    box-shadow: 0 0 0 4px rgba(245, 239, 227, 0.1);
+  }
+
+  .postcode-checker__button {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.4rem;
+    background: #253628;
+    color: #F5EFE3;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    transition: background-color 150ms ease;
+  }
+
+  .postcode-checker--cream .postcode-checker__button {
+    background: #F5EFE3;
+    color: #0e2419;
+  }
+
+  .postcode-checker__button:hover {
+    background: #2B4A3B;
+  }
+
+  .postcode-checker--cream .postcode-checker__button:hover {
+    background: #F8F2E6;
+  }
+
+  .postcode-checker__result {
+    margin-top: 0.9rem;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .postcode-checker__result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+  }
+
+  .postcode-checker__result-badge--yes {
+    color: #2f6b45;
+  }
+
+  .postcode-checker__result-badge--no {
+    color: #9a3f2b;
+  }
+
+  .postcode-checker__result-badge--warn {
+    color: rgba(28, 26, 22, 0.7);
+  }
+
+  .postcode-checker--cream .postcode-checker__result-badge--yes {
+    color: #9fd1ae;
+  }
+
+  .postcode-checker--cream .postcode-checker__result-badge--no {
+    color: #E8B69D;
+  }
+
+  .postcode-checker--cream .postcode-checker__result-badge--warn {
+    color: rgba(245, 239, 227, 0.75);
+  }
+
+  .postcode-checker__tick,
+  .postcode-checker__cross {
+    flex: none;
+    height: 1.1rem;
+    width: 1.1rem;
+  }
+
+  .postcode-checker__result-next {
+    color: currentColor;
+    opacity: 0.8;
+    font-size: 0.9rem;
+  }
+
+  .postcode-checker__link {
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+    font-weight: 500;
+  }
+
+  .postcode-checker__link:hover {
+    opacity: 0.75;
+  }
+
+  @media (min-width: 640px) {
+    .postcode-checker {
+      padding: 1.75rem;
+    }
+  }
+</style>
+
+<script>
+  type Tpl = HTMLTemplateElement;
+
+  const weekdayMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const deliveryDays = new Set(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']);
+  const CUTOFF_HOUR = 10; // 10am same-day cutoff; keep in sync with site.delivery.cutoff.
+
+  function nextDeliveryWindow(now: Date): string {
+    const weekday = weekdayMap[now.getDay()];
+    const isDeliveryDay = deliveryDays.has(weekday);
+    const beforeCutoff = now.getHours() < CUTOFF_HOUR;
+
+    if (isDeliveryDay && beforeCutoff) {
+      return 'Order by 10am for delivery this afternoon.';
+    }
+
+    for (let offset = 1; offset <= 7; offset += 1) {
+      const candidate = weekdayMap[(now.getDay() + offset) % 7];
+      if (deliveryDays.has(candidate)) {
+        const label = offset === 1 ? 'tomorrow' : candidate;
+        return `Next delivery window: ${label}.`;
+      }
+    }
+    return '';
+  }
+
+  /**
+   * Normalise a UK postcode to uppercase with a single space before the
+   * inward code, and return its outward part (e.g. "BD10").
+   */
+  function parsePostcode(raw: string): { outward: string; formatted: string } | null {
+    const cleaned = raw.trim().toUpperCase().replace(/\s+/g, '');
+    // Very permissive UK postcode matcher — area 1–2 letters, district 1–2 digits (or digit+letter),
+    // then optional inward sector/unit. We only need the outward part for prefix matching,
+    // but we also format the display string if a full postcode was entered.
+    const match = cleaned.match(/^([A-Z]{1,2}\d[A-Z\d]?)(\d[A-Z]{2})?$/);
+    if (!match) return null;
+    const outward = match[1];
+    const inward = match[2] ?? '';
+    return {
+      outward,
+      formatted: inward ? `${outward} ${inward}` : outward,
+    };
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-postcode-root]').forEach((root) => {
+    const prefixes = (root.dataset.postcodePrefixes ?? '')
+      .split(',')
+      .map((p) => p.trim().toUpperCase())
+      .filter(Boolean);
+    const form = root.querySelector<HTMLFormElement>('[data-postcode-form]');
+    const input = root.querySelector<HTMLInputElement>('[data-postcode-input]');
+    const result = root.querySelector<HTMLElement>('[data-postcode-result]');
+    const tplYes = root.querySelector<Tpl>('[data-postcode-template-yes]');
+    const tplNo = root.querySelector<Tpl>('[data-postcode-template-no]');
+    const tplInvalid = root.querySelector<Tpl>('[data-postcode-template-invalid]');
+
+    if (!form || !input || !result || !tplYes || !tplNo || !tplInvalid) return;
+
+    function showResult(fragment: DocumentFragment) {
+      if (!result) return;
+      result.innerHTML = '';
+      result.appendChild(fragment);
+      result.hidden = false;
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const parsed = parsePostcode(input!.value);
+
+      if (!parsed) {
+        showResult(tplInvalid!.content.cloneNode(true) as DocumentFragment);
+        return;
+      }
+
+      const outward = parsed.outward;
+      const match = prefixes.some((prefix) => outward === prefix || outward.startsWith(prefix));
+
+      const template = match ? tplYes! : tplNo!;
+      const fragment = template.content.cloneNode(true) as DocumentFragment;
+      fragment.querySelectorAll<HTMLElement>('[data-slot="code"]').forEach((slot) => {
+        slot.textContent = parsed.formatted;
+      });
+      if (match) {
+        const nextSlot = fragment.querySelector<HTMLElement>('[data-slot="next"]');
+        if (nextSlot) nextSlot.textContent = nextDeliveryWindow(new Date());
+      }
+      showResult(fragment);
+    });
+  });
+</script>

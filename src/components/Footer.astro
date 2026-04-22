@@ -5,6 +5,14 @@ import { navLeft, navRight } from '@lib/nav';
 import Wordmark from '@components/Wordmark.astro';
 
 const year = new Date().getFullYear();
+
+// Pre-fills a WhatsApp message asking to join the weekly list. The link
+// opens the user's own WhatsApp conversation with us — no account
+// needed, nothing to store server-side.
+const waJoinMessage = encodeURIComponent(
+  "Hi Idle Greengrocers — please add me to your weekly WhatsApp list for what's in this week.",
+);
+const waJoinHref = `https://wa.me/${site.whatsapp.number.replace(/\D/g, '')}?text=${waJoinMessage}`;
 ---
 
 <footer class="footer-shell green-texture text-cream">
@@ -61,6 +69,29 @@ const year = new Date().getFullYear();
         <a href={`mailto:${site.contact.email}`} class="hover:text-cream">{site.contact.email}</a>
       </p>
     </div>
+
+    <!-- Weekly WhatsApp list — one-tap join, no accounts, no inbox. -->
+    <div class="col-span-2 md:col-span-12">
+      <div class="footer-whatsapp">
+        <div>
+          <p class="eyebrow-dark">What's in this week</p>
+          <p class="footer-whatsapp__line">
+            Join the weekly WhatsApp list for a short note every Friday — what's landing, what's leaving, and the odd recipe idea. Message us and we'll add you.
+          </p>
+        </div>
+        <a
+          href={waJoinHref}
+          target="_blank"
+          rel="noopener"
+          class="footer-whatsapp__button"
+        >
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-7.6-4.9L3 21l5.9-2.1A8.38 8.38 0 0 1 3 12.5 8.5 8.5 0 0 1 12.5 4a8.38 8.38 0 0 1 8.5 7.5" />
+          </svg>
+          Join the list
+        </a>
+      </div>
+    </div>
   </div>
 
   <div class="border-t border-cream/10">
@@ -70,3 +101,53 @@ const year = new Date().getFullYear();
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-whatsapp {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    border-top: 1px solid rgba(245, 239, 227, 0.12);
+    padding-top: 1.5rem;
+  }
+
+  .footer-whatsapp__line {
+    margin-top: 0.55rem;
+    max-width: 54ch;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: rgba(245, 239, 227, 0.75);
+  }
+
+  .footer-whatsapp__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid rgba(245, 239, 227, 0.4);
+    color: #F5EFE3;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    transition: background-color 150ms ease, border-color 150ms ease;
+    white-space: nowrap;
+  }
+
+  .footer-whatsapp__button:hover,
+  .footer-whatsapp__button:focus-visible {
+    background: rgba(245, 239, 227, 0.08);
+    border-color: rgba(245, 239, 227, 0.7);
+  }
+
+  @media (min-width: 768px) {
+    .footer-whatsapp {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+  }
+</style>

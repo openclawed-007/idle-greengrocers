@@ -4,6 +4,7 @@ import Hero from '@components/sections/Hero.astro';
 import LocalPicks from '@components/sections/LocalPicks.astro';
 import SeasonalSection from '@components/sections/SeasonalSection.astro';
 import MakersAndShop from '@components/sections/MakersAndShop.astro';
+import PostcodeChecker from '@components/PostcodeChecker.astro';
 ---
 
 <BaseLayout
@@ -14,5 +15,12 @@ import MakersAndShop from '@components/sections/MakersAndShop.astro';
   <Hero />
   <LocalPicks />
   <SeasonalSection />
+
+  <section class="bg-cream">
+    <div class="container-wide section pb-12 md:pb-16">
+      <PostcodeChecker class="mx-auto max-w-3xl" />
+    </div>
+  </section>
+
   <MakersAndShop />
 </BaseLayout>

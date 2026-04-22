@@ -1,5 +1,6 @@
 ---
 import '@/styles/global.css';
+import AnnouncementStrip from '@components/AnnouncementStrip.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import { withBase } from '@lib/paths';
@@ -92,6 +93,7 @@ const localBusinessSchema = {
     )}
   </head>
   <body class="min-h-screen flex flex-col">
+    <AnnouncementStrip />
     <Header />
     <main id="main" class="flex-1">
       <slot />
