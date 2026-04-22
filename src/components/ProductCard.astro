@@ -1,4 +1,6 @@
 ---
+import { withBase } from '@lib/paths';
+
 type Props = {
   name: string;
   origin: string;
@@ -30,12 +32,13 @@ const priceFormatted = new Intl.NumberFormat('en-GB', {
   style: 'currency',
   currency: 'GBP',
 }).format(price);
+const imageSrc = withBase(image);
 ---
 
 <article class={`group flex h-full flex-col overflow-hidden shadow-card ${cardBg}`}>
   <div class={`relative ${aspectClass} overflow-hidden bg-cream-300`}>
     <img
-      src={image}
+      src={imageSrc}
       alt={imageAlt}
       loading={loading}
       decoding="async"

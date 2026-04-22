@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import LeafDivider from '@components/LeafDivider.astro';
+import { withBase } from '@lib/paths';
 
 const makers = (await getCollection('makers')).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -33,7 +34,7 @@ const makers = (await getCollection('makers')).sort((a, b) => a.data.order - b.d
           <article class="group grid gap-6 md:grid-cols-5 md:gap-8">
             <div class="md:col-span-2">
               <img
-                src={m.data.image}
+                src={withBase(m.data.image)}
                 alt={m.data.imageAlt}
                 width="720"
                 height="900"

@@ -1,9 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
 import Button from '@components/Button.astro';
+import { withBase } from '@lib/paths';
 
 const seasons = await getCollection('seasonal');
 const active = seasons.find((s) => s.data.active) ?? seasons[0]!;
+const activeImage = withBase(active.data.image);
 ---
 
 <section class="bg-cream">
@@ -25,7 +27,7 @@ const active = seasons.find((s) => s.data.active) ?? seasons[0]!;
 
     <div class="relative md:col-span-7">
       <img
-        src={active.data.image}
+        src={activeImage}
         alt={active.data.imageAlt}
         width="1200"
         height="800"
