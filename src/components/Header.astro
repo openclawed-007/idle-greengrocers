@@ -12,23 +12,10 @@ function isActive(href: string) {
 }
 ---
 
-<header class="site-header relative z-40 border-b border-ink/5 bg-cream">
+<header class="site-header relative z-40 border-b border-ink/5 bg-cream" data-site-header>
   <a href="#main" class="skip-link">Skip to content</a>
 
   <div class="container-wide section relative flex items-center justify-center gap-6 py-6 md:py-7 lg:justify-between">
-    <!-- Left nav (desktop ≥ lg) -->
-    <nav aria-label="Primary" class="hidden flex-1 items-center gap-8 lg:flex">
-      {navLeft.map((item) => (
-        <a
-          href={withBase(item.href)}
-          class={`nav-link ${isActive(item.href) ? 'is-active' : ''}`}
-          aria-current={isActive(item.href) ? 'page' : undefined}
-        >
-          {item.label}
-        </a>
-      ))}
-    </nav>
-
     <!-- Mobile / tablet: hamburger / close (visible below lg) -->
     <button
       type="button"
@@ -46,26 +33,48 @@ function isActive(href: string) {
       </svg>
     </button>
 
-    <!-- Centered wordmark -->
-    <div class="flex justify-center lg:flex-1">
+    <!-- Desktop primary nav (≥ lg). Single landmark containing the
+         wordmark home-link + left/right link groups, so SR users hear
+         exactly one 'Primary' navigation. -->
+    <nav aria-label="Primary" class="hidden w-full flex-1 items-center justify-between gap-6 lg:flex">
+      <ul class="flex items-center gap-8">
+        {navLeft.map((item) => (
+          <li>
+            <a
+              href={withBase(item.href)}
+              class={`nav-link ${isActive(item.href) ? 'is-active' : ''}`}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <Wordmark size="md" />
+      <ul class="flex items-center gap-8">
+        {navRight.map((item) => (
+          <li>
+            <a
+              href={withBase(item.href)}
+              class={`nav-link ${isActive(item.href) ? 'is-active' : ''}`}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a href={withBase('/our-produce')} class="nav-link" aria-label="Our produce (shopping bag)">
+            <BagIcon class="h-5 w-5" />
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Mobile / tablet: centred wordmark (below lg) -->
+    <div class="flex justify-center lg:hidden">
       <Wordmark size="md" />
     </div>
-
-    <!-- Right nav (desktop ≥ lg) -->
-    <nav aria-label="Secondary" class="hidden flex-1 items-center justify-end gap-8 lg:flex">
-      {navRight.map((item) => (
-        <a
-          href={withBase(item.href)}
-          class={`nav-link ${isActive(item.href) ? 'is-active' : ''}`}
-          aria-current={isActive(item.href) ? 'page' : undefined}
-        >
-          {item.label}
-        </a>
-      ))}
-      <a href={withBase('/our-produce')} class="nav-link" aria-label="Our produce (shopping bag)">
-        <BagIcon class="h-5 w-5" />
-      </a>
-    </nav>
 
     <!-- Mobile / tablet: bag shortcut -->
     <a href={withBase('/our-produce')} class="nav-link absolute right-0 top-1/2 p-2 -translate-y-1/2 lg:hidden" aria-label="Our produce (shopping bag)">
@@ -83,7 +92,7 @@ function isActive(href: string) {
     data-mobile-panel
     aria-hidden="true"
   >
-    <nav aria-label="Mobile" class="container-wide section flex flex-col py-2">
+    <nav aria-label="Primary" class="container-wide section flex flex-col py-2">
       {[...navLeft, ...navRight].map((item) => (
         <a
           href={withBase(item.href)}
@@ -157,6 +166,11 @@ function isActive(href: string) {
     transform: translateY(-8px);
     pointer-events: none;
     transition: opacity 200ms ease, transform 220ms ease;
+    /* Scroll within the panel rather than clipping when the viewport
+       (e.g. landscape phone) is shorter than the nav list. */
+    max-height: calc(100dvh - 100%);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .mobile-panel[data-open] {
     opacity: 1;

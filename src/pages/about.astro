@@ -2,7 +2,6 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import LeafDivider from '@components/LeafDivider.astro';
 import Button from '@components/Button.astro';
-import CircularBadge from '@components/CircularBadge.astro';
 import { withBase } from '@lib/paths';
 import { site } from '@lib/site';
 ---
@@ -16,7 +15,7 @@ import { site } from '@lib/site';
       <div class="mx-auto max-w-3xl text-center">
         <p class="eyebrow">Our Story</p>
         <h1 class="mt-3 font-display text-4xl font-medium leading-tight text-forest-ink md:text-6xl">
-          A proper<br />greengrocer.
+          A proper<br class="hidden md:inline" /> greengrocer.
         </h1>
         <p class="mx-auto mt-5 max-w-2xl text-[0.98rem] leading-relaxed text-ink/72">
           A family-run shop in the heart of Idle, built around seasonal produce, known growers
@@ -71,9 +70,6 @@ import { site } from '@lib/site';
               class="aspect-[4/5] w-full object-cover"
               loading="eager"
             />
-          </div>
-          <div class="about-badge">
-            <CircularBadge topText="Est. 2020" bottomText="Idle · Yorkshire" tone="forest" size={130} />
           </div>
         </div>
       </div>
@@ -160,7 +156,6 @@ import { site } from '@lib/site';
 
   .about-image-wrap {
     position: relative;
-    padding-bottom: 1.5rem;
   }
 
   .about-image-frame {
@@ -168,12 +163,6 @@ import { site } from '@lib/site';
     border: 1px solid rgba(31, 58, 40, 0.1);
     background: rgba(251, 247, 238, 0.8);
     box-shadow: 0 18px 36px -26px rgba(28, 26, 22, 0.26);
-  }
-
-  .about-badge {
-    position: absolute;
-    left: 0.75rem;
-    bottom: 0;
   }
 
   .belief-card {
@@ -210,22 +199,12 @@ import { site } from '@lib/site';
     .about-image-wrap {
       padding-left: 1.25rem;
     }
-
-    .about-badge {
-      left: -1.4rem;
-      bottom: -1.2rem;
-    }
   }
 
   @media (max-width: 479px) {
     .about-copy-panel,
     .about-cta-panel {
       padding: 1.2rem;
-    }
-
-    .about-badge {
-      transform: scale(0.78);
-      transform-origin: left bottom;
     }
   }
 </style>

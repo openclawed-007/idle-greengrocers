@@ -13,7 +13,7 @@ const featured = (await getCollection('products', ({ data }) => data.featured))
   <div class="container-wide section py-8 md:py-10">
     <LeafDivider tone="cream" label="Local Picks" />
 
-    <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+    <div class="mt-6 grid grid-cols-2 gap-4 md:grid-cols-5">
       {featured.map((p) => (
         <ProductCard
           name={p.data.name}

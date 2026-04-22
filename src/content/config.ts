@@ -4,7 +4,7 @@ const products = defineCollection({
   type: 'content',
   schema: z.object({
     name: z.string(),
-    category: z.enum(['fruit', 'vegetables', 'dairy-eggs', 'bakery', 'pantry', 'preserves']),
+    category: z.enum(['fruit', 'vegetables', 'dairy-eggs', 'bakery', 'preserves']),
     origin: z.string(),
     supplier: z.string().optional(),
     price: z.number().positive(),

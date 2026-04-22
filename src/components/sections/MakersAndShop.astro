@@ -10,11 +10,11 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 <section class="grid md:grid-cols-2">
   <!-- Meet the Makers -->
   <div class="relative overflow-hidden bg-cream-400">
-    <div class="section grid items-center gap-8 py-16 md:grid-cols-2 md:py-20">
+    <div class="section grid items-center gap-8 py-16 md:py-20 xl:grid-cols-2">
       <div>
         <p class="eyebrow">Meet the Makers</p>
         <h2 class="mt-3 font-display text-3xl font-medium leading-tight text-forest-ink md:text-4xl">
-          Supporting local<br />farmers &amp; makers
+          Supporting local<br class="hidden md:inline" /> farmers &amp; makers
         </h2>
         <p class="mt-5 max-w-prose2 text-[0.92rem] leading-relaxed text-ink/80">
           We're proud to champion the brilliant people growing, baking and crafting
@@ -81,7 +81,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
     <div class="section flex flex-col justify-center py-16 md:py-20">
       <p class="eyebrow" style="color:#D8A07A">Visit our Shop</p>
       <h2 class="mt-3 font-display text-3xl font-medium leading-tight text-cream md:text-4xl">
-        Right in the heart<br />of Idle village
+        Right in the heart<br class="hidden md:inline" /> of Idle village
       </h2>
       <p class="mt-5 max-w-prose2 text-[0.92rem] leading-relaxed text-cream/80">
         Pop in and see us. We'd love to help you fill your basket.
@@ -103,7 +103,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
     <!-- Shopfront — fills the full height of this panel -->
     <div class="relative min-h-[420px] md:min-h-0">
       <img
-        src={withBase('/images/shop/shopfront.png')}
+        src={withBase('/images/shop/shopfront.webp')}
         alt="The forest-green shopfront of Idle Greengrocers with crates of fresh produce outside."
         width="900"
         height="1400"

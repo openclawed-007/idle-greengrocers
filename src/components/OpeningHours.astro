@@ -106,7 +106,7 @@ const rows = hours.map((entry, index) => ({
   .hours-state {
     font-family: Inter, system-ui, sans-serif;
     font-size: 0.76rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.24em;
     text-transform: uppercase;
     color: #0e2419;
@@ -179,7 +179,7 @@ const rows = hours.map((entry, index) => ({
     padding: 0.22rem 0.5rem;
     font-family: Inter, system-ui, sans-serif;
     font-size: 0.64rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     vertical-align: middle;
@@ -322,7 +322,28 @@ const rows = hours.map((entry, index) => ({
   }
 
   cards.forEach((card) => {
-    updateHoursCard(card);
-    window.setInterval(() => updateHoursCard(card), 60000);
+    let timer: number | undefined;
+
+    const start = () => {
+      if (timer !== undefined) return;
+      updateHoursCard(card);
+      timer = window.setInterval(() => updateHoursCard(card), 60000);
+    };
+
+    const stop = () => {
+      if (timer === undefined) return;
+      window.clearInterval(timer);
+      timer = undefined;
+    };
+
+    // Only tick while the page is visible to the user. Also refresh
+    // immediately when they come back so the "open/closed" state is
+    // correct after a long background period.
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else start();
+    });
+
+    if (!document.hidden) start();
   });
 </script>

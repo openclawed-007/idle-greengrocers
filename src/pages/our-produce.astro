@@ -36,21 +36,30 @@ const categories = [
       <LeafDivider tone="dark" />
     </div>
 
-    <!-- Category filter -->
-    <div class="container-wide section flex flex-wrap items-center justify-center gap-2 pb-10">
+    <!-- Category filter. Buttons act as a toggle-group; active state is
+         reflected via aria-pressed so assistive tech announces it. -->
+    <div
+      class="container-wide section flex flex-wrap items-center justify-center gap-2 pb-10"
+      role="group"
+      aria-label="Filter produce by category"
+    >
       {categories.map((c) => (
         <button
           type="button"
           data-filter={c.id}
-          class="btn-outline border-forest/40 px-4 py-2 text-[0.68rem] data-[active=true]:bg-forest data-[active=true]:text-cream"
-          data-active={c.id === 'all' ? 'true' : 'false'}
+          class="btn-outline border-forest/40 px-4 py-2 text-[0.68rem] aria-pressed:bg-forest aria-pressed:text-cream"
+          aria-pressed={c.id === 'all' ? 'true' : 'false'}
         >
           {c.label}
         </button>
       ))}
     </div>
 
-    <div class="container-wide section grid grid-cols-2 gap-5 pb-24 sm:grid-cols-3 lg:grid-cols-4">
+    <div
+      class="container-wide section grid grid-cols-2 gap-5 pb-6 sm:grid-cols-3 lg:grid-cols-4"
+      data-product-grid
+      aria-live="polite"
+    >
       {products.map((p) => (
         <div data-category={p.data.category}>
           <ProductCard
@@ -65,20 +74,63 @@ const categories = [
         </div>
       ))}
     </div>
+
+    <p
+      class="container-wide section hidden pb-24 text-center text-[0.95rem] text-ink/70"
+      data-empty-state
+      role="status"
+    >
+      Nothing in that category right now — try <button type="button" class="underline underline-offset-4 hover:text-ink" data-reset>All</button> to see everything we have in today.
+    </p>
+    <div class="container-wide section pb-24" data-grid-spacer></div>
   </section>
 
   <script>
     const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
     const items = document.querySelectorAll<HTMLDivElement>('[data-category]');
-    buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const target = btn.getAttribute('data-filter');
-        buttons.forEach((b) => b.setAttribute('data-active', b === btn ? 'true' : 'false'));
-        items.forEach((it) => {
-          const match = target === 'all' || it.getAttribute('data-category') === target;
-          it.style.display = match ? '' : 'none';
-        });
+    const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
+    const spacer = document.querySelector<HTMLElement>('[data-grid-spacer]');
+    const resetBtn = document.querySelector<HTMLButtonElement>('[data-reset]');
+    const validFilters = new Set(Array.from(buttons, (b) => b.dataset.filter));
+
+    function applyFilter(target: string, { updateUrl = true } = {}) {
+      if (!validFilters.has(target)) target = 'all';
+
+      buttons.forEach((b) =>
+        b.setAttribute('aria-pressed', b.dataset.filter === target ? 'true' : 'false'),
+      );
+
+      let visible = 0;
+      items.forEach((it) => {
+        const match = target === 'all' || it.dataset.category === target;
+        it.toggleAttribute('hidden', !match);
+        if (match) visible += 1;
       });
+
+      if (emptyState) emptyState.toggleAttribute('hidden', visible !== 0);
+      if (spacer) spacer.toggleAttribute('hidden', visible === 0);
+
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        if (target === 'all') url.searchParams.delete('category');
+        else url.searchParams.set('category', target);
+        window.history.replaceState({}, '', url);
+      }
+    }
+
+    buttons.forEach((btn) =>
+      btn.addEventListener('click', () => applyFilter(btn.dataset.filter ?? 'all')),
+    );
+    resetBtn?.addEventListener('click', () => applyFilter('all'));
+
+    // Hydrate from ?category= on load so links/bookmarks are shareable.
+    const initial = new URLSearchParams(window.location.search).get('category') ?? 'all';
+    applyFilter(initial, { updateUrl: false });
+
+    // Support back/forward navigation between filter states.
+    window.addEventListener('popstate', () => {
+      const current = new URLSearchParams(window.location.search).get('category') ?? 'all';
+      applyFilter(current, { updateUrl: false });
     });
   </script>
 </BaseLayout>
