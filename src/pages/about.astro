@@ -3,6 +3,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import LeafDivider from '@components/LeafDivider.astro';
 import Button from '@components/Button.astro';
 import CircularBadge from '@components/CircularBadge.astro';
+import { withBase } from '@lib/paths';
 import { site } from '@lib/site';
 ---
 
@@ -63,7 +64,7 @@ import { site } from '@lib/site';
         <div class="about-image-wrap">
           <div class="about-image-frame">
             <img
-              src="/images/about/shop-interior.jpg"
+              src={withBase('/images/about/shop-interior.jpg')}
               alt="Inside Idle Greengrocers — wooden shelves lined with colourful seasonal produce."
               width="1200"
               height="1500"

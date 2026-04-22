@@ -2,6 +2,7 @@
 import '@/styles/global.css';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import { withBase } from '@lib/paths';
 import { site } from '@lib/site';
 
 type Props = {
@@ -15,7 +16,7 @@ type Props = {
 const {
   title,
   description = site.description,
-  image = '/og-image.jpg',
+  image = withBase('/og-image.jpg'),
   noIndex = false,
   includeLocalBusinessSchema = false,
 } = Astro.props;
@@ -23,6 +24,7 @@ const {
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} — Fresh fruit, vegetables & local produce`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).toString();
 const ogImage = new URL(image, Astro.site ?? site.url).toString();
+const placeholderImage = withBase('/images/placeholder.svg');
 
 const localBusinessSchema = {
   '@context': 'https://schema.org',
@@ -66,8 +68,8 @@ const localBusinessSchema = {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
 
     <meta name="theme-color" content="#F5EFE3" />
     {noIndex && <meta name="robots" content="noindex" />}
@@ -101,9 +103,9 @@ const localBusinessSchema = {
       photos haven't been added yet) is swapped to /images/placeholder.svg.
       Tiny inline script, runs once on DOMContentLoaded — no framework needed.
     -->
-    <script is:inline>
+    <script is:inline define:vars={{ placeholderImage }}>
       (function () {
-        var PH = '/images/placeholder.svg';
+        var PH = placeholderImage;
         function handle(img) {
           if (!img || img.dataset.fallback === 'done') return;
           img.dataset.fallback = 'done';

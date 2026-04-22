@@ -1,9 +1,10 @@
 ---
 import { navLeft, navRight } from '@lib/nav';
+import { stripBase, withBase } from '@lib/paths';
 import Wordmark from '@components/Wordmark.astro';
 import BagIcon from '@components/BagIcon.astro';
 
-const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const currentPath = stripBase(Astro.url.pathname).replace(/\/$/, '') || '/';
 
 function isActive(href: string) {
   if (href === '/') return currentPath === '/';
@@ -19,7 +20,7 @@ function isActive(href: string) {
     <nav aria-label="Primary" class="hidden flex-1 items-center gap-8 lg:flex">
       {navLeft.map((item) => (
         <a
-          href={item.href}
+          href={withBase(item.href)}
           class={`nav-link ${isActive(item.href) ? 'is-active' : ''}`}
           aria-current={isActive(item.href) ? 'page' : undefined}
         >
@@ -54,20 +55,20 @@ function isActive(href: string) {
     <nav aria-label="Secondary" class="hidden flex-1 items-center justify-end gap-8 lg:flex">
       {navRight.map((item) => (
         <a
-          href={item.href}
+          href={withBase(item.href)}
           class={`nav-link ${isActive(item.href) ? 'is-active' : ''}`}
           aria-current={isActive(item.href) ? 'page' : undefined}
         >
           {item.label}
         </a>
       ))}
-      <a href="/our-produce" class="nav-link" aria-label="Our produce (shopping bag)">
+      <a href={withBase('/our-produce')} class="nav-link" aria-label="Our produce (shopping bag)">
         <BagIcon class="h-5 w-5" />
       </a>
     </nav>
 
     <!-- Mobile / tablet: bag shortcut -->
-    <a href="/our-produce" class="nav-link p-2 lg:hidden" aria-label="Our produce (shopping bag)">
+    <a href={withBase('/our-produce')} class="nav-link p-2 lg:hidden" aria-label="Our produce (shopping bag)">
       <BagIcon class="h-5 w-5" />
     </a>
   </div>
@@ -85,7 +86,7 @@ function isActive(href: string) {
     <nav aria-label="Mobile" class="container-wide section flex flex-col py-2">
       {[...navLeft, ...navRight].map((item) => (
         <a
-          href={item.href}
+          href={withBase(item.href)}
           class={`mobile-link ${isActive(item.href) ? 'is-active' : ''}`}
           aria-current={isActive(item.href) ? 'page' : undefined}
           data-mobile-link

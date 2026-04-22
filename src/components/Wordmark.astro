@@ -1,4 +1,6 @@
 ---
+import { withBase } from '@lib/paths';
+
 /**
  * Centered editorial wordmark used in the header and footer.
  * Accepts `tone` to switch between dark-on-cream and cream-on-dark.
@@ -20,7 +22,7 @@ const sizes = {
 }[size];
 ---
 
-<a href="/" class={`inline-flex flex-col items-center ${color} ${className}`} aria-label="Idle Greengrocers — home">
+<a href={withBase('/')} class={`inline-flex flex-col items-center ${color} ${className}`} aria-label="Idle Greengrocers — home">
   <!-- Laurel mark -->
   <svg
     aria-hidden="true"

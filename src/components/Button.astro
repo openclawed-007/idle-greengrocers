@@ -1,4 +1,6 @@
 ---
+import { withBase } from '@lib/paths';
+
 type Props = {
   href?: string;
   variant?: 'primary' | 'outline' | 'outline-cream';
@@ -21,11 +23,12 @@ const classes = {
 }[variant];
 
 const Tag = href ? 'a' : 'button';
+const resolvedHref = href ? withBase(href) : undefined;
 ---
 
 <Tag
   class={`${classes} ${className}`}
-  href={href}
+  href={resolvedHref}
   type={href ? undefined : type}
   aria-label={ariaLabel}
 >

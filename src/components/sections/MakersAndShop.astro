@@ -1,5 +1,6 @@
 ---
 import Button from '@components/Button.astro';
+import { withBase } from '@lib/paths';
 import { site } from '@lib/site';
 
 const mapsQuery = encodeURIComponent(site.address.full);
@@ -29,7 +30,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
         <!-- Top-left -->
         <div class="absolute left-0 top-0 w-36 -rotate-6 bg-cream-50 p-2 shadow-polaroid md:w-40">
           <img
-            src="/images/makers/polaroid-cow.jpg"
+            src={withBase('/images/makers/polaroid-cow.jpg')}
             alt="A brown-and-white Yorkshire dairy cow in a green pasture."
             width="320"
             height="400"
@@ -40,7 +41,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
         <!-- Top-right (slightly overlaps top-left horizontally) -->
         <div class="absolute right-0 top-4 w-36 rotate-6 bg-cream-50 p-2 shadow-polaroid md:w-40">
           <img
-            src="/images/makers/polaroid-preserves.jpg"
+            src={withBase('/images/makers/polaroid-preserves.jpg')}
             alt="Three small jars of homemade preserves with handwritten kraft labels."
             width="320"
             height="400"
@@ -51,7 +52,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
         <!-- Bottom, centered, overlapping upward into the pair above -->
         <div class="absolute bottom-0 left-1/2 w-40 -translate-x-1/2 -rotate-3 bg-cream-50 p-2 shadow-polaroid md:w-44">
           <img
-            src="/images/makers/polaroid-bread.jpg"
+            src={withBase('/images/makers/polaroid-bread.jpg')}
             alt="Artisan sourdough boules on a dark wooden peel."
             width="320"
             height="400"
@@ -61,7 +62,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
         </div>
         <div class="absolute bottom-0 left-[calc(50%+5rem)] z-10 w-20 -translate-x-1/2 translate-y-1/2 md:left-[calc(50%+5.5rem)] md:w-24">
           <img
-            src="/images/hero/yorkshire-logo.png"
+            src={withBase('/images/hero/yorkshire-logo.png')}
             alt="Idle Greengrocers Yorkshire logo"
             width="150"
             height="150"
@@ -102,7 +103,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
     <!-- Shopfront — fills the full height of this panel -->
     <div class="relative min-h-[420px] md:min-h-0">
       <img
-        src="/images/shop/shopfront.png"
+        src={withBase('/images/shop/shopfront.png')}
         alt="The forest-green shopfront of Idle Greengrocers with crates of fresh produce outside."
         width="900"
         height="1400"

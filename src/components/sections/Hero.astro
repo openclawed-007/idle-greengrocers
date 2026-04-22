@@ -1,5 +1,6 @@
 ---
 import Button from '@components/Button.astro';
+import { withBase } from '@lib/paths';
 ---
 
 <section class="relative overflow-hidden bg-cream">
@@ -21,7 +22,7 @@ import Button from '@components/Button.astro';
         </h1>
         <!-- Logo: vertically centered on the "Idle" line, horizontally centered over the final "s" of Greengrocers. -->
         <img
-          src="/images/hero/yorkshire-logo.png"
+          src={withBase('/images/hero/yorkshire-logo.png')}
           alt=""
           aria-hidden="true"
           width="150"
@@ -47,7 +48,7 @@ import Button from '@components/Button.astro';
     <div class="relative hidden md:col-span-7 md:block md:self-end">
       <div class="hero-bleed-right relative">
         <img
-          src="/images/hero/hero-crate.png"
+          src={withBase('/images/hero/hero-crate.png')}
           alt="A wooden crate branded Idle Greengrocers overflowing with fresh seasonal produce — cabbage, leeks, potatoes, beetroot and carrots."
           width="1600"
           height="1200"
