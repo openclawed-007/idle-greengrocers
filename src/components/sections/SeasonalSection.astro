@@ -38,9 +38,9 @@ const activeImage = withBase(active.data.image);
 
       <!-- Pinned paper note — overlaps the image's top-right corner on
            all viewports as a decorative callout. -->
-      <div class="pinned-note absolute right-2 top-2 w-40 rotate-[1deg] bg-cream-50 px-3.5 pb-3.5 pt-4.5 md:-right-6 md:-top-10 md:w-52 md:rotate-[2.5deg] md:px-5 md:pb-5 md:pt-6">
+      <div class="pinned-note absolute right-2 top-2 w-36 rotate-[1deg] bg-cream-50 px-3 pb-3 pt-4 sm:w-40 md:right-3 md:top-3 md:w-40 lg:-right-6 lg:-top-10 lg:w-52 lg:rotate-[2.5deg] lg:px-5 lg:pb-5 lg:pt-6">
         <!-- Pushpin -->
-        <span class="pin absolute -top-2 left-1/2 h-3.5 w-3.5 -translate-x-1/2 md:-top-3 md:h-5 md:w-5" aria-hidden="true">
+        <span class="pin absolute -top-2 left-1/2 h-3.5 w-3.5 -translate-x-1/2 lg:-top-3 lg:h-5 lg:w-5" aria-hidden="true">
           <span class="absolute inset-0 rounded-full bg-terracotta shadow-md"></span>
           <span class="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-terracotta-soft"></span>
           <span class="absolute left-[30%] top-[22%] h-1 w-1 rounded-full bg-white/70"></span>
@@ -49,23 +49,23 @@ const activeImage = withBase(active.data.image);
         <!-- Eyebrow with hairlines -->
         <div class="flex items-center gap-2 text-terracotta">
           <span class="h-px flex-1 bg-terracotta/30"></span>
-          <p class="font-sans text-[0.5rem] font-semibold uppercase tracking-[0.22em] md:text-[0.6rem] md:tracking-widest2">
+          <p class="font-sans text-[0.5rem] font-semibold uppercase tracking-[0.22em] lg:text-[0.6rem] lg:tracking-widest2">
             {active.data.title}
           </p>
           <span class="h-px flex-1 bg-terracotta/30"></span>
         </div>
 
-        <ul class="mt-2.5 space-y-0.5 text-center font-display text-[0.95rem] leading-[1.08] text-forest-ink md:mt-4 md:space-y-2 md:text-[1.35rem] md:leading-[1.15]">
+        <ul class="mt-2.5 space-y-0.5 text-center font-display text-[0.92rem] leading-[1.08] text-forest-ink sm:text-[0.95rem] lg:mt-4 lg:space-y-2 lg:text-[1.35rem] lg:leading-[1.15]">
           {active.data.items.map((it) => <li>{it}</li>)}
         </ul>
 
         <!-- Hand-drawn flourish -->
-        <svg viewBox="0 0 80 16" class="mx-auto mt-2.5 h-3 w-14 text-terracotta/60 md:mt-4 md:h-4 md:w-20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true">
+        <svg viewBox="0 0 80 16" class="mx-auto mt-2.5 h-3 w-14 text-terracotta/60 lg:mt-4 lg:h-4 lg:w-20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true">
           <path d="M4 8 Q 14 1 24 8 T 44 8 T 64 8" />
           <path d="M64 8 l 6 -3 M64 8 l 6 3" />
         </svg>
 
-        <p class="mt-1 text-center font-script text-[0.82rem] text-ink-muted md:mt-2 md:text-base">fresh this week</p>
+        <p class="mt-1 text-center font-script text-[0.82rem] text-ink-muted lg:mt-2 lg:text-base">fresh this week</p>
       </div>
     </div>
   </div>

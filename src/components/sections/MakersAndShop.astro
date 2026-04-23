@@ -10,7 +10,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 <section class="grid md:grid-cols-2">
   <!-- Meet the Makers -->
   <div class="relative overflow-hidden bg-cream-400">
-    <div class="section grid items-center gap-8 py-16 md:py-20 xl:grid-cols-2">
+    <div class="section grid items-center gap-6 py-12 md:gap-8 md:py-20 xl:grid-cols-2">
       <div>
         <p class="eyebrow">Meet the Makers</p>
         <h2 class="mt-3 font-display text-3xl font-medium leading-tight text-forest-ink md:text-4xl">
@@ -26,9 +26,9 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
       </div>
 
       <!-- Polaroids: 2 across the top, 1 centered below overlapping -->
-      <div class="relative mx-auto h-[360px] w-full max-w-sm md:h-[380px]">
+      <div class="relative mx-auto h-[300px] w-full max-w-[20rem] sm:h-[320px] md:h-[380px] md:max-w-sm">
         <!-- Top-left -->
-        <div class="absolute left-0 top-0 w-36 -rotate-6 bg-cream-50 p-2 shadow-polaroid md:w-40">
+        <div class="absolute left-2 top-0 w-32 -rotate-6 bg-cream-50 p-2 shadow-polaroid sm:w-36 md:left-0 md:w-40">
           <img
             src={withBase('/images/makers/polaroid-cow.jpg')}
             alt="A brown-and-white Yorkshire dairy cow in a green pasture."
@@ -39,7 +39,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
           />
         </div>
         <!-- Top-right (slightly overlaps top-left horizontally) -->
-        <div class="absolute right-0 top-4 w-36 rotate-6 bg-cream-50 p-2 shadow-polaroid md:w-40">
+        <div class="absolute right-2 top-3 w-32 rotate-6 bg-cream-50 p-2 shadow-polaroid sm:w-36 md:right-0 md:top-4 md:w-40">
           <img
             src={withBase('/images/makers/polaroid-preserves.jpg')}
             alt="Three small jars of homemade preserves with handwritten kraft labels."
@@ -50,7 +50,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
           />
         </div>
         <!-- Bottom, centered, overlapping upward into the pair above -->
-        <div class="absolute bottom-0 left-1/2 w-40 -translate-x-1/2 -rotate-3 bg-cream-50 p-2 shadow-polaroid md:w-44">
+        <div class="absolute bottom-0 left-1/2 w-36 -translate-x-1/2 -rotate-3 bg-cream-50 p-2 shadow-polaroid sm:w-40 md:w-44">
           <img
             src={withBase('/images/makers/polaroid-bread.jpg')}
             alt="Artisan sourdough boules on a dark wooden peel."
@@ -60,7 +60,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
             class="aspect-[4/5] w-full object-cover"
           />
         </div>
-        <div class="absolute bottom-0 left-[calc(50%+5rem)] z-10 w-20 -translate-x-1/2 translate-y-1/2 md:left-[calc(50%+5.5rem)] md:w-24">
+        <div class="absolute bottom-0 left-[calc(50%+4.5rem)] z-10 w-16 -translate-x-1/2 translate-y-1/2 sm:w-20 md:left-[calc(50%+5.5rem)] md:w-24">
           <img
             src={withBase('/images/hero/yorkshire-logo.png')}
             alt="Idle Greengrocers Yorkshire logo"

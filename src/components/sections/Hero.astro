@@ -4,38 +4,19 @@ import { withBase } from '@lib/paths';
 ---
 
 <section class="relative overflow-hidden bg-cream">
-  <div class="container-wide section grid items-center gap-6 py-8 md:grid-cols-12 md:gap-8 md:pb-8 md:pt-10 lg:pb-0">
-    <!-- Copy -->
-    <div class="relative z-10 md:col-span-5">
+  <div class="container-wide section grid items-center gap-6 py-8 md:grid-cols-12 md:gap-8 md:pb-10 md:pt-10 lg:pb-8">
+    <div class="relative z-10 md:col-span-6 xl:col-span-5">
       <p class="hero-eyebrow font-script text-forest-ink/80">Fresh. Local. Sustainable.</p>
 
-      <!--
-        Wrapper:
-        - inherits the h1's type scale so `1lh` below = h1's first-line height
-        - `w-fit` shrinks its width to the widest line ("Greengrocers"),
-          so the wrapper's right edge = the right edge of the "s".
-        - font-size uses clamp() for smooth scaling across viewport widths.
-      -->
-      <div class="hero-title-wrap relative mt-3 w-fit font-display font-medium leading-[1.02]">
+      <div class="hero-title-wrap mt-3 font-display font-medium leading-[1.02]">
         <h1 class="text-forest-ink">
-          Idle<br />Greengrocers
+          Fresh produce,<br />local flavour
         </h1>
-        <!-- Logo: vertically centered on the "Idle" line, horizontally centered over the final "s" of Greengrocers. -->
-        <img
-          src={withBase('/images/hero/yorkshire-logo.png')}
-          alt=""
-          aria-hidden="true"
-          width="150"
-          height="150"
-          loading="eager"
-          decoding="async"
-          class="hero-logo pointer-events-none absolute hidden max-w-none md:block"
-        />
       </div>
 
       <p class="mt-4 max-w-prose2 text-[0.92rem] leading-relaxed text-ink/80">
-        Carefully sourced fruit, vegetables and local produce from trusted Yorkshire growers
-        and makers. Fresh flavour, every day.
+        Fruit, vegetables and pantry favourites from trusted Yorkshire growers
+        and makers, served from our village shop in Idle.
       </p>
 
       <div class="hero-cta-group mt-5">
@@ -44,12 +25,11 @@ import { withBase } from '@lib/paths';
       </div>
     </div>
 
-    <!-- Image: right edge kisses the container's right edge; bottom flush with the section bottom. -->
-    <div class="relative hidden md:col-span-7 md:block md:self-end">
+    <div class="relative hidden md:col-span-6 md:block md:self-end xl:col-span-7">
       <div class="hero-bleed-right relative">
         <img
           src={withBase('/images/hero/hero-crate.webp')}
-          alt="A wooden crate branded Idle Greengrocers overflowing with fresh seasonal produce — cabbage, leeks, potatoes, beetroot and carrots."
+          alt="A wooden crate branded Idle Greengrocers overflowing with fresh seasonal produce - cabbage, leeks, potatoes, beetroot and carrots."
           width="1600"
           height="1200"
           loading="eager"
@@ -63,60 +43,14 @@ import { withBase } from '@lib/paths';
 </section>
 
 <style>
-  /*
-   * Fluid typography: scales smoothly between mobile, tablet and desktop.
-   *
-   * The h1 stays dominant over the script eyebrow at every viewport
-   * width, while its minimum is low enough that "Greengrocers" never
-   * overflows small phones (~320px).
-   *   - 320px:  title ~36px / eyebrow ~20px  (1.8x)
-   *   - 375px:  title ~41px / eyebrow ~20px  (2.0x)
-   *   - 768px:  title ~84px / eyebrow ~23px  (3.7x)
-   *   - 1280px: title 92px  / eyebrow 36px   (2.6x)
-   */
   .hero-eyebrow {
     font-size: clamp(1.25rem, 3vw, 2.25rem);
   }
+
   .hero-title-wrap {
-    font-size: clamp(2.25rem, 11vw, 5.75rem);
-  }
-  /*
-   * Size the logo as a ratio of the H1's font-size (1.14em = 105px when the
-   * H1 is at its max 92px). Because the logo inherits its font-size from
-   * the .hero-title-wrap, it scales exactly in lockstep with the H1 — and
-   * stops changing as soon as the H1 stops changing.
-   */
-  .hero-logo {
-    width: 1.14em;
+    font-size: clamp(2.4rem, 6.2vw, 4.8rem);
   }
 
-  /*
-   * Lock the logo's vertical centerline to the "Idle" line's centerline, and
-   * its horizontal centerline to the final "s" of "Greengrocers".
-   *
-   * - `top: 0.5lh` positions the logo's anchor at the vertical center of the
-   *   first line (inherited line-height × font-size of the wrapper).
-   * - `left: 100%` anchors to the wrapper's right edge, which — thanks to
-   *   `w-fit` — is the right edge of "Greengrocers".
-   * - The transform shifts up by half the logo's height (centers vertically)
-   *   and left by half its width plus ~0.18em (half the width of a serif
-   *   "s" at this type scale), so the logo centers over the "s".
-   *
-   * Because all offsets are relative to the heading's own font-size /
-   * line-height, this stays correct at any viewport width.
-   */
-  .hero-logo {
-    top: 0.5lh;
-    left: 100%;
-    transform: translate(calc(-50% - 0.18em), -50%);
-  }
-
-  /*
-   * Bleed the hero image to the container's right edge (not the viewport).
-   * The extension matches `.section`'s fluid horizontal padding via the
-   * shared `--section-pad` custom property, so the image and the rest of
-   * the page scale together continuously — no breakpoint jumps.
-   */
   .hero-bleed-right {
     width: calc(100% + var(--section-pad));
     max-width: none;
